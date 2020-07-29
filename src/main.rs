@@ -1,6 +1,7 @@
 #![deny(unsafe_code)]
 #![deny(warnings)]
 
+use chrono::{DateTime, Local};
 use clap::{App, Arg};
 use dirs::config_dir;
 use reqwest::{blocking::Client, header};
@@ -19,7 +20,7 @@ struct Shipment {
 
 #[derive(Debug, Deserialize)]
 struct Event {
-    date: String,
+    date: DateTime<Local>,
     label: String,
 }
 
