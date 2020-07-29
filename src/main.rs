@@ -49,7 +49,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .json()?;
 
     for event in tracking_info.shipment.event.iter().rev() {
-        println!("{}: {}", event.date, event.label);
+        println!("{}: {}", event.date.to_rfc2822(), event.label);
     }
 
     Ok(())
