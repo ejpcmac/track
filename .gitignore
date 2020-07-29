@@ -13,3 +13,10 @@
 ##
 
 /.history/
+
+##
+## Local files
+##
+
+# Application secrets
+/api_key
