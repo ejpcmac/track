@@ -2,6 +2,7 @@
 #![deny(warnings)]
 
 use clap::{App, Arg};
+use dirs::config_dir;
 use reqwest::{blocking::Client, header};
 use serde::Deserialize;
 use std::fs;
@@ -35,7 +36,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let tracking_number = matches.value_of("tracking_number").unwrap();
     let url = API_ENDPOINT.to_owned() + tracking_number;
 
-    let api_key = fs::read_to_string("api_key")?;
+    let api_key_file = config_dir().unwrap().join("track").join("api_key");
+    let api_key = fs::read_to_string(api_key_file)?;
 
     let client = Client::new();
     let tracking_info: TrackingInfo = client
