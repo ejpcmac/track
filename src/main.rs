@@ -2,11 +2,20 @@
 #![deny(warnings)]
 
 use chrono::{DateTime, Local};
-use clap::{App, Arg};
 use dirs::config_dir;
 use reqwest::{blocking::Client, header};
 use serde::Deserialize;
 use std::fs;
+use structopt::StructOpt;
+
+/// A quick-and-dirty CLI tool for tracking parcels
+#[derive(Debug, StructOpt)]
+#[structopt(author = "Jean-Philippe Cugnet <jean-philippe@cugnet.eu>")]
+struct Opts {
+    /// The tracking number
+    #[structopt(name = "tracking_number")]
+    tracking_number: String,
+}
 
 #[derive(Debug, Deserialize)]
 struct TrackingInfo {
@@ -27,15 +36,9 @@ struct Event {
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let matches = App::new("track")
-        .version("0.1.0-dev")
-        .author("Jean-Philippe Cugnet <jean-philippe@cugnet.eu>")
-        .about("A quick-and-dirty CLI tool for tracking parcels")
-        .arg(Arg::with_name("tracking_number").required(true))
-        .get_matches();
+    let opts = Opts::from_args();
 
-    let tracking_number = matches.value_of("tracking_number").unwrap();
-    let url = API_ENDPOINT.to_owned() + tracking_number;
+    let url = API_ENDPOINT.to_owned() + &opts.tracking_number;
 
     let api_key_file = config_dir().unwrap().join("track").join("api_key");
     let api_key = fs::read_to_string(api_key_file)?;
