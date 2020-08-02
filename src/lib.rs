@@ -4,11 +4,11 @@
 use chrono::{DateTime, Local};
 use dirs::config_dir;
 use reqwest::header::{self, HeaderMap};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{fs, io};
 
 /// The client configuration.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     api_key: String,
 }
@@ -47,16 +47,18 @@ impl Config {
 
     /// Loads the configuration.
     pub fn load() -> io::Result<Self> {
-        let api_key_file = config_dir().unwrap().join("track").join("api_key");
-        let api_key = fs::read_to_string(api_key_file)?;
+        let file = config_dir().unwrap().join("track").join("config.toml");
+        let contents = fs::read_to_string(file)?;
+        let config = toml::from_str(&contents)?;
 
-        Ok(Self { api_key })
+        Ok(config)
     }
 
     /// Saves the configuration.
     pub fn save(&self) -> io::Result<()> {
-        let api_key_file = config_dir().unwrap().join("track").join("api_key");
-        fs::write(api_key_file, &self.api_key)?;
+        let file = config_dir().unwrap().join("track").join("config.toml");
+        let config = toml::to_string(self).unwrap();
+        fs::write(file, config)?;
 
         Ok(())
     }
