@@ -3,7 +3,7 @@
 
 use std::io::{self, Write};
 use structopt::StructOpt;
-use track::{Client, Config};
+use track::client::{Client, Config};
 
 /// A quick-and-dirty CLI tool for tracking parcels
 #[derive(Debug, StructOpt)]
