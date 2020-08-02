@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key_file = config_dir().unwrap().join("track").join("api_key");
     let api_key = fs::read_to_string(api_key_file)?;
 
-    let client = Client::new(api_key);
+    let client = Client::new(&api_key);
     client.track(&opts.tracking_number)?;
 
     Ok(())
