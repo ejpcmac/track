@@ -2,8 +2,16 @@
 #![deny(warnings)]
 
 use chrono::{DateTime, Local};
+use dirs::config_dir;
 use reqwest::header::{self, HeaderMap};
 use serde::Deserialize;
+use std::{fs, io};
+
+/// The client configuration.
+#[derive(Debug)]
+pub struct Config {
+    api_key: String,
+}
 
 /// A tracking API client.
 #[derive(Debug)]
@@ -29,12 +37,22 @@ struct Event {
 
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
+impl Config {
+    /// Loads the configuration.
+    pub fn load() -> io::Result<Self> {
+        let api_key_file = config_dir().unwrap().join("track").join("api_key");
+        let api_key = fs::read_to_string(api_key_file)?;
+
+        Ok(Self { api_key })
+    }
+}
+
 impl Client {
     /// Creates a new `Client`.
-    pub fn new(api_key: &str) -> Self {
+    pub fn new(config: Config) -> Self {
         let mut headers = HeaderMap::new();
         headers.insert(header::ACCEPT, "application/json".parse().unwrap());
-        headers.insert("X-Okapi-Key", api_key.parse().unwrap());
+        headers.insert("X-Okapi-Key", config.api_key.parse().unwrap());
 
         let reqwest_client = reqwest::blocking::Client::builder()
             .default_headers(headers)
