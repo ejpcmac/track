@@ -13,7 +13,7 @@ enum Command {
     /// Initialises the configuration
     Init,
 
-    /// Retrives and prints tracking info for a parcel
+    /// Retrieves and prints tracking info for a parcel
     Info(Info),
 
     /// Prints the set of tracked parcels
@@ -25,7 +25,7 @@ enum Command {
     /// Removes a parcel from the tracked set
     Remove(Remove),
 
-    /// Retrives and prints tracking info for all tracked parcels
+    /// Retrieves and prints tracking info for all tracked parcels
     All,
 }
 
