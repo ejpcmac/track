@@ -4,7 +4,7 @@
 use colored::Colorize;
 use std::io::{self, Write};
 use structopt::StructOpt;
-use track::client::{Client, Config};
+use track::client::{Client, Config, Event};
 use track::State;
 
 /// A quick-and-dirty CLI tool for tracking parcels
@@ -92,7 +92,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Info(opts) => match Config::load() {
             Ok(config) => {
                 let client = Client::new(config);
-                client.track(&opts.tracking_number)?;
+                let events = client.get_events(&opts.tracking_number)?;
+                print_events(&events);
             }
             Err(_) => no_config_message(),
         },
@@ -156,7 +157,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     );
 
                     println!("{}", message.bold());
-                    client.track(tracking_number)?;
+                    let events = client.get_events(tracking_number)?;
+                    print_events(&events);
                     println!();
                 }
             }
@@ -173,4 +175,11 @@ fn no_config_message() {
         "The configuration is absent or invalid.".red().bold(),
         "You can create a configuration by running `track init`.".blue()
     );
+}
+
+fn print_events(events: &[Event]) {
+    for event in events.iter().rev() {
+        let date = format!("{}:", event.date.to_rfc2822());
+        println!("{} {}", date.bright_black(), event.label);
+    }
 }

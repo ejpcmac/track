@@ -25,10 +25,14 @@ struct Shipment {
     event: Vec<Event>,
 }
 
+/// An event.
 #[derive(Debug, Deserialize)]
-struct Event {
-    date: DateTime<Local>,
-    label: String,
+pub struct Event {
+    /// The timestamp of the event.
+    pub date: DateTime<Local>,
+
+    /// A description of the event.
+    pub label: String,
 }
 
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
@@ -80,17 +84,16 @@ impl Client {
         Self { reqwest_client }
     }
 
-    /// Retreives and prints the tracking info for a parcel.
-    pub fn track(&self, tracking_number: &str) -> Result<(), reqwest::Error> {
+    /// Retrieves the events for a parcel.
+    pub fn get_events(
+        &self,
+        tracking_number: &str,
+    ) -> Result<Vec<Event>, reqwest::Error> {
         let url = API_ENDPOINT.to_owned() + tracking_number;
 
         let tracking_info: TrackingInfo =
             self.reqwest_client.get(&url).send()?.json()?;
 
-        for event in tracking_info.shipment.event.iter().rev() {
-            println!("{}: {}", event.date.to_rfc2822(), event.label);
-        }
-
-        Ok(())
+        Ok(tracking_info.shipment.event)
     }
 }
