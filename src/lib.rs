@@ -3,8 +3,8 @@
 
 pub mod client;
 
+use im::HashMap;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::{fs, io};
 
 /// Tracking data.
@@ -61,14 +61,19 @@ impl State {
     }
 
     /// Adds a parcel to track.
-    pub fn add_parcel(&mut self, tracking_number: &str, description: &str) {
-        self.parcels
-            .insert(tracking_number.to_owned(), description.to_owned());
+    pub fn add_parcel(&self, tracking_number: &str, description: &str) -> Self {
+        Self {
+            parcels: self
+                .parcels
+                .update(tracking_number.to_owned(), description.to_owned()),
+        }
     }
 
     /// Removes a parcel.
-    pub fn remove_parcel(&mut self, tracking_number: &str) {
-        self.parcels.remove(tracking_number);
+    pub fn remove_parcel(&self, tracking_number: &str) -> Self {
+        Self {
+            parcels: self.parcels.without(tracking_number),
+        }
     }
 
     /// Returns the set of tracked parcels.

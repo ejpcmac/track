@@ -83,15 +83,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         Command::Add(opts) => {
-            let mut state = State::load()?;
-            state.add_parcel(&opts.tracking_number, &opts.description);
-            state.save()?;
+            State::load()?
+                .add_parcel(&opts.tracking_number, &opts.description)
+                .save()?;
         }
 
         Command::Remove(opts) => {
-            let mut state = State::load()?;
-            state.remove_parcel(&opts.tracking_number);
-            state.save()?;
+            State::load()?.remove_parcel(&opts.tracking_number).save()?;
         }
 
         Command::All => {
