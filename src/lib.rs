@@ -38,12 +38,27 @@ struct Event {
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 impl Config {
+    /// Creates a new configuration.
+    pub fn new(api_key: &str) -> Self {
+        Self {
+            api_key: api_key.to_owned(),
+        }
+    }
+
     /// Loads the configuration.
     pub fn load() -> io::Result<Self> {
         let api_key_file = config_dir().unwrap().join("track").join("api_key");
         let api_key = fs::read_to_string(api_key_file)?;
 
         Ok(Self { api_key })
+    }
+
+    /// Saves the configuration.
+    pub fn save(&self) -> io::Result<()> {
+        let api_key_file = config_dir().unwrap().join("track").join("api_key");
+        fs::write(api_key_file, &self.api_key)?;
+
+        Ok(())
     }
 }
 
