@@ -24,6 +24,9 @@ enum Command {
 
     /// Removes a parcel from the tracked set
     Remove(Remove),
+
+    /// Retrives and prints tracking info for all tracked parcels
+    All,
 }
 
 #[derive(Debug, StructOpt)]
@@ -89,6 +92,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut state = State::load()?;
             state.remove_parcel(&opts.tracking_number);
             state.save()?;
+        }
+
+        Command::All => {
+            let state = State::load()?;
+            let config = Config::load()?;
+            let client = Client::new(config);
+
+            for (tracking_number, description) in state.parcels() {
+                println!("\n--- {} ({})\n", description, tracking_number);
+                client.track(tracking_number)?;
+                println!();
+            }
         }
     }
 
