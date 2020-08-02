@@ -1,5 +1,4 @@
 use chrono::{DateTime, Local};
-use dirs::config_dir;
 use reqwest::header::{self, HeaderMap};
 use serde::{Deserialize, Serialize};
 use std::{fs, io};
@@ -44,18 +43,23 @@ impl Config {
 
     /// Loads the configuration.
     pub fn load() -> io::Result<Self> {
-        let file = config_dir().unwrap().join("track").join("config.toml");
-        let contents = fs::read_to_string(file)?;
+        let config_file = dirs::config_dir()
+            .unwrap()
+            .join("track")
+            .join("config.toml");
+        let contents = fs::read_to_string(config_file)?;
         let config = toml::from_str(&contents)?;
-
         Ok(config)
     }
 
     /// Saves the configuration.
     pub fn save(&self) -> io::Result<()> {
-        let file = config_dir().unwrap().join("track").join("config.toml");
+        let config_dir = dirs::config_dir().unwrap().join("track");
+        fs::create_dir_all(&config_dir)?;
+
+        let config_file = config_dir.join("config.toml");
         let config = toml::to_string(self).unwrap();
-        fs::write(file, config)?;
+        fs::write(config_file, config)?;
 
         Ok(())
     }
