@@ -1,6 +1,7 @@
 #![deny(unsafe_code)]
 #![deny(warnings)]
 
+use colored::Colorize;
 use std::io::{self, Write};
 use structopt::StructOpt;
 use track::client::{Client, Config};
@@ -11,7 +12,7 @@ use track::State;
 #[structopt(author = "Jean-Philippe Cugnet <jean-philippe@cugnet.eu>")]
 enum Command {
     /// Initialises the configuration
-    Init,
+    Init(Init),
 
     /// Retrieves and prints tracking info for a parcel
     Info(Info),
@@ -27,6 +28,13 @@ enum Command {
 
     /// Retrieves and prints tracking info for all tracked parcels
     All,
+}
+
+#[derive(Debug, StructOpt)]
+struct Init {
+    /// Force the init process
+    #[structopt(short, long)]
+    force: bool,
 }
 
 #[derive(Debug, StructOpt)]
@@ -55,55 +63,114 @@ struct Remove {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     match Command::from_args() {
-        Command::Init => {
+        Command::Init(opts) => {
+            if !opts.force && Config::load().is_ok() {
+                println!(
+                    "{}\n{}",
+                    "There is already a configuration.".red().bold(),
+                    "You can force the command by running `track init -f`."
+                        .blue()
+                );
+                std::process::exit(1);
+            }
+
             let mut input = String::new();
 
-            print!("Enter your La Poste API key: ");
+            print!("{}", "Enter your La Poste API key: ".bold());
             io::stdout().flush()?;
             io::stdin().read_line(&mut input)?;
 
             let config = Config::new(input.trim());
             config.save()?;
 
-            println!("The configuration has been initialised.");
+            println!(
+                "{}",
+                "The configuration has been initialised.".green().bold()
+            );
         }
 
-        Command::Info(opts) => {
-            let config = Config::load()?;
-            let client = Client::new(config);
-            client.track(&opts.tracking_number)?;
-        }
+        Command::Info(opts) => match Config::load() {
+            Ok(config) => {
+                let client = Client::new(config);
+                client.track(&opts.tracking_number)?;
+            }
+            Err(_) => no_config_message(),
+        },
 
         Command::List => {
             let state = State::load()?;
 
+            println!("\n{}\n", "--- Tracked parcels ---".bold());
             for (tracking_number, description) in state.parcels() {
                 println!("{}: {}", tracking_number, description);
             }
+            println!();
         }
 
         Command::Add(opts) => {
-            State::load()?
+            let state = State::load()?;
+            state
                 .add_parcel(&opts.tracking_number, &opts.description)
                 .save()?;
+
+            let message = match state.parcels().get(&opts.tracking_number) {
+                None => format!(
+                    "{} ({}) is now tracked.",
+                    opts.description, opts.tracking_number
+                ),
+                Some(old_description) => format!(
+                    "{} ({}) has been renamed to “{}”.",
+                    old_description, opts.tracking_number, opts.description
+                ),
+            };
+
+            println!("{}", message.green().bold());
         }
 
         Command::Remove(opts) => {
-            State::load()?.remove_parcel(&opts.tracking_number).save()?;
-        }
-
-        Command::All => {
             let state = State::load()?;
-            let config = Config::load()?;
-            let client = Client::new(config);
 
-            for (tracking_number, description) in state.parcels() {
-                println!("\n--- {} ({})\n", description, tracking_number);
-                client.track(tracking_number)?;
-                println!();
-            }
+            let message = match state.parcels().get(&opts.tracking_number) {
+                Some(description) => {
+                    state.remove_parcel(&opts.tracking_number).save()?;
+                    format!(
+                        "{} ({}) is not tracked anymore.",
+                        description, opts.tracking_number
+                    )
+                }
+                None => format!("{} was not tracked.", opts.tracking_number),
+            };
+
+            println!("{}", message.green().bold());
         }
+
+        Command::All => match Config::load() {
+            Ok(config) => {
+                let state = State::load()?;
+                let client = Client::new(config);
+
+                for (tracking_number, description) in state.parcels() {
+                    let message = format!(
+                        "\n--- {} ({}) ---\n",
+                        description, tracking_number
+                    );
+
+                    println!("{}", message.bold());
+                    client.track(tracking_number)?;
+                    println!();
+                }
+            }
+            Err(_) => no_config_message(),
+        },
     }
 
     Ok(())
+}
+
+fn no_config_message() {
+    println!(
+        "{}\n{}",
+        "The configuration is absent or invalid.".red().bold(),
+        "You can create a configuration by running `track init`.".blue()
+    );
 }

@@ -40,7 +40,6 @@ impl State {
                 let data = toml::from_str(&contents)?;
                 Ok(data)
             }
-
             Err(e) => match e.kind() {
                 io::ErrorKind::NotFound => Ok(Self::new()),
                 _ => Err(e),
