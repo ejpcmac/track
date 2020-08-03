@@ -57,8 +57,9 @@ Or simply remove one from the list:
 
 # Caveats
 
-There is currently no proper error handling, and I have tested it only for
-Colissimo.
+* The library crate API is unstable
+* There is currently no proper error handling
+* I have tested it only for Colissimo parcels
 
 ## License
 
