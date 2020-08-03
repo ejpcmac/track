@@ -1,8 +1,17 @@
 [package]
-name = "track-cli"
-version = "0.1.0-dev"
+name = "track"
+version = "0.1.0"
 authors = ["Jean-Philippe Cugnet <jean-philippe@cugnet.eu>"]
 license = "GPL-3.0-or-later"
 edition = "2018"
 
 [dependencies]
+
+structopt = "0.3.9"
+colored = "1.9.3"
+im = { version = "14.2.0", features = ["serde"] }
+dirs = "2.0.2"
+serde = { version = "1.0.104", features = ["derive"] }
+toml = "0.5.0"
+reqwest = { version = "0.10.2", features = ["blocking", "json"] }
+chrono = { version = "0.4.10", features = ["serde"] }
