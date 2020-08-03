@@ -3,7 +3,7 @@
 A quick-and-dirty CLI tool for tracking parcels with the [La Poste
 API](https://developer.laposte.fr/products/suivi/latest).
 
-# Rationale
+## Rationale
 
 At the time of writing this tool, I am in some place with a really slow internet
 access. This means refreshing the tracking information page on
@@ -15,7 +15,7 @@ In my browser, I used to keep some tabs open to track incoming parcels. With
 `track`, I can now register which parcels to track and get an overview pretty
 quickly. I am sure it will be helpful even with a high-speed internet access.
 
-# Setup
+## Setup
 
 To use `track`, you need an account on [La Poste
 Developer](https://developer.laposte.fr). You can then create a new
@@ -32,7 +32,7 @@ Configure `track` to use your API key:
 
     $ track init
 
-# Usage
+## Usage
 
 You can track an individual parcel:
 
@@ -54,7 +54,7 @@ Or simply remove one from the list:
 
     $ track remove <tracking_number>
 
-# Caveats
+## Caveats
 
 * The library crate API is unstable
 * There is currently no proper error handling

@@ -1144,7 +1144,7 @@ checksum = "e987b6bf443f4b5b3b6f38704195592cca41c5bb7aedd3c3693c7081f8289860"
 
 [[package]]
 name = "track"
-version = "0.1.0-dev"
+version = "0.1.0"
 dependencies = [
  "chrono",
  "colored",
