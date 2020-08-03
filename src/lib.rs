@@ -33,14 +33,14 @@
 //!
 //! To use `track`, you need an account on [La Poste
 //! Developer](https://developer.laposte.fr). You can then create a new
-//! application—name it `track-cli` for instance—and register to their [free
+//! application—name it `track` for instance—and register to their [free
 //! tracking API](https://developer.laposte.fr/products/suivi/latest) to get an
 //! API key.
 //!
 //! Then, install `track`:
 //!
 //! ```shell
-//! $ cargo install --git https://github.com/ejpcmac/track-cli.git
+//! $ cargo install --git https://github.com/ejpcmac/track.git
 //! ```
 //!
 //! Configure `track` to use your API key:

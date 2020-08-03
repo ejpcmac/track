@@ -1,4 +1,4 @@
-# track-cli
+# track
 
 A quick-and-dirty CLI tool for tracking parcels with the [La Poste
 API](https://developer.laposte.fr/products/suivi/latest).
@@ -19,14 +19,13 @@ quickly. I am sure it will be helpful even with a high-speed internet access.
 
 To use `track`, you need an account on [La Poste
 Developer](https://developer.laposte.fr). You can then create a new
-application—name it `track-cli` for instance—and register to their [free
-tracking API](https://developer.laposte.fr/products/suivi/latest) to get an API
-key.
+application—name it `track` for instance—and register to their [free tracking
+API](https://developer.laposte.fr/products/suivi/latest) to get an API key.
 
 Then, install `track`:
 
 ```shell
-$ cargo install --git https://github.com/ejpcmac/track-cli.git
+$ cargo install --git https://github.com/ejpcmac/track.git
 ```
 
 Configure `track` to use your API key:
