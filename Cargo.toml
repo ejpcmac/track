@@ -1,6 +1,6 @@
 [package]
 name = "track"
-version = "0.1.0"
+version = "0.1.1-dev"
 authors = ["Jean-Philippe Cugnet <jean-philippe@cugnet.eu>"]
 license = "GPL-3.0-or-later"
 edition = "2018"
