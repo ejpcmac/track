@@ -11,10 +11,6 @@ mkShell {
     # Build toolchain
     rustup
 
-    # Project dependencies
-    pkgconfig
-    openssl
-
     # Other tools
     git
     gitflow
