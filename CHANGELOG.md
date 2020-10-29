@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+* Switch the TLS stack from OpenSSL to rustls.
+
 ## [0.1.0] - 2020-08-03
 
 * Initial release, featuring:
