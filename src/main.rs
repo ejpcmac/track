@@ -23,11 +23,15 @@
 #![deny(unused_must_use)]
 #![forbid(unsafe_code)]
 
-use colored::Colorize;
 use std::io::{self, Write};
+
+use colored::Colorize;
 use structopt::StructOpt;
-use track::client::{Client, Config, Event};
-use track::State;
+
+use track::{
+    client::{Client, Config, Event},
+    State,
+};
 
 /// A quick-and-dirty CLI tool for tracking parcels
 #[derive(Debug, StructOpt)]

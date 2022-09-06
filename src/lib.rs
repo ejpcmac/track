@@ -84,9 +84,10 @@
 
 pub mod client;
 
+use std::{fs, io};
+
 use im::HashMap;
 use serde::{Deserialize, Serialize};
-use std::{fs, io};
 
 /// The persistent state for `track`.
 #[derive(Debug, Default, Serialize, Deserialize)]

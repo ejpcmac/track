@@ -15,10 +15,11 @@
 
 //! A quick-and-dirty client for the La Poste “Suivi v2” API.
 
+use std::{fs, io};
+
 use chrono::{DateTime, Local};
 use reqwest::header::{self, HeaderMap};
 use serde::{Deserialize, Serialize};
-use std::{fs, io};
 
 /// The client configuration.
 #[derive(Debug, Serialize, Deserialize)]
