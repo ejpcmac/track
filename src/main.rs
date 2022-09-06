@@ -33,56 +33,50 @@ use track::{
     State,
 };
 
-/// A quick-and-dirty CLI tool for tracking parcels
+/// A quick-and-dirty CLI tool for tracking parcels.
 #[derive(Debug, StructOpt)]
 #[structopt(author = "Jean-Philippe Cugnet <jean-philippe@cugnet.eu>")]
 enum Command {
-    /// Initialises the configuration
+    /// Initialise the configuration.
     Init(Init),
-
-    /// Retrieves and prints tracking info for a parcel
+    /// Retrieve and prints tracking info for a parcel.
     Info(Info),
-
-    /// Prints the set of tracked parcels
+    /// Print the set of tracked parcels.
     List,
-
-    /// Adds a parcel to the tracked set
+    /// Add a parcel to the tracked set.
     Add(Add),
-
-    /// Removes a parcel from the tracked set
+    /// Remove a parcel from the tracked set.
     Remove(Remove),
-
-    /// Retrieves and prints tracking info for all tracked parcels
+    /// Retrieve and prints tracking info for all tracked parcels.
     All,
 }
 
 #[derive(Debug, StructOpt)]
 struct Init {
-    /// Force the init process
+    /// Force the init process.
     #[structopt(short, long)]
     force: bool,
 }
 
 #[derive(Debug, StructOpt)]
 struct Info {
-    /// The tracking number
+    /// The tracking number.
     #[structopt(name = "tracking_number")]
     tracking_number: String,
 }
 
 #[derive(Debug, StructOpt)]
 struct Add {
-    /// The tracking number
+    /// The tracking number.
     #[structopt(name = "tracking_number")]
     tracking_number: String,
-
-    /// A description for the parcel
+    /// A description for the parcel.
     description: String,
 }
 
 #[derive(Debug, StructOpt)]
 struct Remove {
-    /// The tracking number
+    /// The tracking number.
     #[structopt(name = "tracking_number")]
     tracking_number: String,
 }
