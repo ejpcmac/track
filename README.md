@@ -60,6 +60,11 @@ Or simply remove one from the list:
 * There is currently no proper error handling
 * I have tested it only for Colissimo parcels
 
+## [Contributing](CONTRIBUTING.md)
+
+Before contributing to this project, please read the
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 Copyright © 2020 Jean-Philippe Cugnet
