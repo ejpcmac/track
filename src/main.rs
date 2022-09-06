@@ -26,6 +26,7 @@
 use std::io::{self, Write};
 
 use clap::Parser;
+use color_eyre::Result;
 use colored::Colorize;
 
 use track::{
@@ -78,7 +79,9 @@ struct Remove {
     tracking_number: String,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<()> {
+    color_eyre::install()?;
+
     match Command::from_args() {
         Command::Init(opts) => {
             if !opts.force && Config::load().is_ok() {
