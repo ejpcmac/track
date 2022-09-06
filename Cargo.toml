@@ -4,6 +4,7 @@ version = "0.1.2-dev"
 authors = ["Jean-Philippe Cugnet <jean-philippe@cugnet.eu>"]
 edition = "2018"
 license = "GPL-3.0-only"
+description = "A quick-and-dirty CLI tool for tracking parcels."
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
