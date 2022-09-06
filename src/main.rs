@@ -13,8 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#![deny(unsafe_code)]
-#![deny(warnings)]
+//! A quick-and-dirty CLI tool for tracking parcels.
+
+#![warn(rust_2018_idioms)]
+#![warn(clippy::redundant_pub_crate)]
+#![warn(clippy::unwrap_used)]
+#![warn(clippy::use_self)]
+#![deny(missing_docs)]
+#![deny(unused_must_use)]
+#![forbid(unsafe_code)]
 
 use colored::Colorize;
 use std::io::{self, Write};

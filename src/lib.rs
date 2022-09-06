@@ -74,8 +74,13 @@
 //! * There is currently no proper error handling
 //! * I have tested it only for Colissimo parcels
 
-#![deny(unsafe_code)]
-#![deny(warnings)]
+#![warn(rust_2018_idioms)]
+#![warn(clippy::redundant_pub_crate)]
+#![warn(clippy::unwrap_used)]
+#![warn(clippy::use_self)]
+#![deny(missing_docs)]
+#![deny(unused_must_use)]
+#![forbid(unsafe_code)]
 
 pub mod client;
 
