@@ -37,7 +37,7 @@ use track::{
 /// A quick-and-dirty CLI tool for tracking parcels.
 #[derive(Debug, Parser)]
 #[clap(version, author)]
-enum Command {
+enum Track {
     /// Initialise the configuration.
     Init(Init),
     /// Retrieve and prints tracking info for a parcel.
@@ -82,8 +82,8 @@ struct Remove {
 fn main() -> Result<()> {
     color_eyre::install()?;
 
-    match Command::from_args() {
-        Command::Init(opts) => {
+    match Track::from_args() {
+        Track::Init(opts) => {
             if !opts.force && Config::load().is_ok() {
                 println!(
                     "{}\n{}",
@@ -109,7 +109,7 @@ fn main() -> Result<()> {
             );
         }
 
-        Command::Info(opts) => match Config::load() {
+        Track::Info(opts) => match Config::load() {
             Ok(config) => {
                 let client = Client::new(config);
                 let events = client.get_events(&opts.tracking_number)?;
@@ -118,7 +118,7 @@ fn main() -> Result<()> {
             Err(_) => no_config_message(),
         },
 
-        Command::List => {
+        Track::List => {
             let state = State::load()?;
 
             println!("\n{}\n", "--- Tracked parcels ---".bold());
@@ -128,7 +128,7 @@ fn main() -> Result<()> {
             println!();
         }
 
-        Command::Add(opts) => {
+        Track::Add(opts) => {
             let state = State::load()?;
             state
                 .add_parcel(&opts.tracking_number, &opts.description)
@@ -148,7 +148,7 @@ fn main() -> Result<()> {
             println!("{}", message.green().bold());
         }
 
-        Command::Remove(opts) => {
+        Track::Remove(opts) => {
             let state = State::load()?;
 
             let message = match state.parcels().get(&opts.tracking_number) {
@@ -165,7 +165,7 @@ fn main() -> Result<()> {
             println!("{}", message.green().bold());
         }
 
-        Command::All => match Config::load() {
+        Track::All => match Config::load() {
             Ok(config) => {
                 let state = State::load()?;
                 let client = Client::new(config);
