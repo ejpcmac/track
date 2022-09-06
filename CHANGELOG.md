@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+* **BREAKING** Make the library APIs private.
 * Update the dependencies.
 
 ## [0.1.1] - 2020-10-29

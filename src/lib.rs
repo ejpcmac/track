@@ -22,10 +22,9 @@
 #![deny(unused_must_use)]
 #![forbid(unsafe_code)]
 
-pub mod client;
-pub mod state;
-
+mod client;
 mod command;
+mod state;
 
 #[doc(hidden)]
 pub use command::Track;

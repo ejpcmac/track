@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//! The persistent state for `track`.
-
 use std::{fs, io};
 
 use im::HashMap;
