@@ -24,3 +24,8 @@
 
 pub mod client;
 pub mod state;
+
+mod command;
+
+#[doc(hidden)]
+pub use command::Track;
