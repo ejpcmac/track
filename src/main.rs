@@ -25,8 +25,8 @@
 
 use std::io::{self, Write};
 
+use clap::Parser;
 use colored::Colorize;
-use structopt::StructOpt;
 
 use track::{
     client::{Client, Config, Event},
@@ -34,8 +34,8 @@ use track::{
 };
 
 /// A quick-and-dirty CLI tool for tracking parcels.
-#[derive(Debug, StructOpt)]
-#[structopt(author = "Jean-Philippe Cugnet <jean-philippe@cugnet.eu>")]
+#[derive(Debug, Parser)]
+#[clap(version, author)]
 enum Command {
     /// Initialise the configuration.
     Init(Init),
@@ -51,33 +51,30 @@ enum Command {
     All,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Init {
     /// Force the init process.
-    #[structopt(short, long)]
+    #[clap(short, long)]
     force: bool,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Info {
     /// The tracking number.
-    #[structopt(name = "tracking_number")]
     tracking_number: String,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Add {
     /// The tracking number.
-    #[structopt(name = "tracking_number")]
     tracking_number: String,
     /// A description for the parcel.
     description: String,
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Remove {
     /// The tracking number.
-    #[structopt(name = "tracking_number")]
     tracking_number: String,
 }
 
