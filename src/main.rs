@@ -31,7 +31,7 @@ use colored::Colorize;
 
 use track::{
     client::{Client, Config, Event},
-    State,
+    state::State,
 };
 
 /// A quick-and-dirty CLI tool for tracking parcels.
