@@ -64,5 +64,4 @@ Or simply remove one from the list:
 
 Copyright © 2020 Jean-Philippe Cugnet
 
-This project is licensed under the [GNU General Public License 3.0 or
-later](LICENSE).
+This project is licensed under the [GNU General Public License 3.0](LICENSE).
