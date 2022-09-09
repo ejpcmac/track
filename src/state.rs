@@ -53,6 +53,7 @@ pub enum SaveError {
     FsError(#[from] io::Error),
 }
 
+/// An error that can occur when getting the data directory.
 #[derive(Debug, Error)]
 pub enum DataDirError {
     #[error("the OS does not define a data directory")]
