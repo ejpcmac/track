@@ -37,13 +37,13 @@ impl super::Command for Remove {
                 format!(
                     "{description} ({tracking_number}) is not tracked anymore."
                 )
+                .green()
+                .bold()
             }
-            None => {
-                format!("{tracking_number} was not tracked.")
-            }
+            None => format!("{tracking_number} was not tracked.").red().bold(),
         };
 
-        println!("{}", message.green().bold());
+        println!("{message}");
 
         Ok(())
     }
