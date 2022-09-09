@@ -36,9 +36,7 @@ type Description = String;
 impl State {
     /// Creates empty tracking data.
     pub fn new() -> Self {
-        Self {
-            parcels: Parcels::new(),
-        }
+        Self::default()
     }
 
     /// Loads the data.
