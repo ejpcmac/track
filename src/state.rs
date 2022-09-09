@@ -67,10 +67,7 @@ impl State {
             .join("data.toml");
 
         match fs::read_to_string(data_file) {
-            Ok(contents) => {
-                let data = toml::from_str(&contents)?;
-                Ok(data)
-            }
+            Ok(contents) => Ok(toml::from_str(&contents)?),
             Err(e) => match e.kind() {
                 io::ErrorKind::NotFound => Ok(Self::new()),
                 _ => Err(e.into()),
