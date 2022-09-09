@@ -37,13 +37,13 @@ pub enum Track {
     /// Retrieve and prints tracking info for a parcel.
     Info(Info),
     /// Print the set of tracked parcels.
-    List,
+    List(List),
     /// Add a parcel to the tracked set.
     Add(Add),
     /// Remove a parcel from the tracked set.
     Remove(Remove),
     /// Retrieve and prints tracking info for all tracked parcels.
-    All,
+    All(All),
 }
 
 trait Command {
@@ -57,10 +57,10 @@ impl Track {
         match Self::parse() {
             Self::Init(init) => init.run(),
             Self::Info(info) => info.run(),
-            Self::List => List.run(),
+            Self::List(list) => list.run(),
             Self::Add(add) => add.run(),
             Self::Remove(remove) => remove.run(),
-            Self::All => All.run(),
+            Self::All(all) => all.run(),
         }
     }
 }
