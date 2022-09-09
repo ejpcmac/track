@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{collections::HashMap, fs, io};
+use std::{collections::HashMap, fs, io, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -36,8 +36,8 @@ type Description = String;
 /// An error that can occur when loading the state.
 #[derive(Debug, Error)]
 pub enum LoadError {
-    #[error("impossible to locate the state file: no data directory")]
-    NoDataDir,
+    #[error("impossible to locate the state file")]
+    NoDataDir(#[from] DataDirError),
     #[error("error while reading the state file")]
     ReadError(#[from] io::Error),
     #[error("error while parsing the state file")]
@@ -47,11 +47,20 @@ pub enum LoadError {
 /// An error that can occur when saving the state.
 #[derive(Debug, Error)]
 pub enum SaveError {
-    #[error("impossible to locate the state file: no data directory")]
-    NoDataDir,
+    #[error("impossible to locate the state file")]
+    NoDataDir(#[from] DataDirError),
     #[error("error while writing to the state file")]
     FsError(#[from] io::Error),
 }
+
+#[derive(Debug, Error)]
+pub enum DataDirError {
+    #[error("the OS does not define a data directory")]
+    NoDataDir,
+}
+
+/// The name of the state file.
+const STATE_FILE_NAME: &str = "data.toml";
 
 impl State {
     /// Creates empty tracking data.
@@ -61,12 +70,7 @@ impl State {
 
     /// Loads the state.
     pub fn load() -> Result<Self, LoadError> {
-        let data_file = dirs::data_dir()
-            .ok_or(LoadError::NoDataDir)?
-            .join("track")
-            .join("data.toml");
-
-        match fs::read_to_string(data_file) {
+        match fs::read_to_string(data_file()?) {
             Ok(contents) => Ok(toml::from_str(&contents)?),
             Err(e) => match e.kind() {
                 io::ErrorKind::NotFound => Ok(Self::new()),
@@ -77,14 +81,11 @@ impl State {
 
     /// Saves the state.
     pub fn save(&self) -> Result<(), SaveError> {
-        let data_dir =
-            dirs::data_dir().ok_or(SaveError::NoDataDir)?.join("track");
-        fs::create_dir_all(&data_dir)?;
+        fs::create_dir_all(data_dir()?)?;
 
-        let data_file = data_dir.join("data.toml");
         let data =
             toml::to_string(self).expect("failed to serialise the state");
-        fs::write(data_file, data)?;
+        fs::write(data_file()?, data)?;
 
         Ok(())
     }
@@ -111,4 +112,14 @@ impl State {
     pub fn parcels(&self) -> &Parcels {
         &self.parcels
     }
+}
+
+fn data_dir() -> Result<PathBuf, DataDirError> {
+    Ok(dirs::data_dir()
+        .ok_or(DataDirError::NoDataDir)?
+        .join(env!("CARGO_PKG_NAME")))
+}
+
+fn data_file() -> Result<PathBuf, DataDirError> {
+    Ok(data_dir()?.join(STATE_FILE_NAME))
 }
