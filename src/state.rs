@@ -64,15 +64,15 @@ pub enum DataDirError {
 const STATE_FILE_NAME: &str = "state.toml";
 
 impl State {
-    /// Creates empty tracking data.
+    /// Creates empty state.
     pub fn new() -> Self {
         Self::default()
     }
 
     /// Loads the state.
     pub fn load() -> Result<Self, LoadError> {
-        match fs::read_to_string(data_file()?) {
-            Ok(contents) => Ok(toml::from_str(&contents)?),
+        match fs::read_to_string(state_file()?) {
+            Ok(state) => Ok(toml::from_str(&state)?),
             Err(e) => match e.kind() {
                 io::ErrorKind::NotFound => Ok(Self::new()),
                 _ => Err(e.into()),
@@ -84,9 +84,9 @@ impl State {
     pub fn save(&self) -> Result<(), SaveError> {
         fs::create_dir_all(data_dir()?)?;
 
-        let data =
+        let state =
             toml::to_string(self).expect("failed to serialise the state");
-        fs::write(data_file()?, data)?;
+        fs::write(state_file()?, state)?;
 
         Ok(())
     }
@@ -121,6 +121,6 @@ fn data_dir() -> Result<PathBuf, DataDirError> {
         .join(env!("CARGO_PKG_NAME")))
 }
 
-fn data_file() -> Result<PathBuf, DataDirError> {
+fn state_file() -> Result<PathBuf, DataDirError> {
     Ok(data_dir()?.join(STATE_FILE_NAME))
 }
