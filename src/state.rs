@@ -60,7 +60,7 @@ pub enum DataDirError {
 }
 
 /// The name of the state file.
-const STATE_FILE_NAME: &str = "data.toml";
+const STATE_FILE_NAME: &str = "state.toml";
 
 impl State {
     /// Creates empty tracking data.
