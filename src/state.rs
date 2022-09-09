@@ -16,6 +16,7 @@
 use std::{collections::HashMap, fs, io};
 
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 
 /// The persistent state for `track`.
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -32,16 +33,38 @@ type TrackingNumber = String;
 /// A parcel description.
 type Description = String;
 
+/// An error that can occur when loading the state.
+#[derive(Debug, Error)]
+pub enum LoadError {
+    #[error("impossible to locate the state file: no data directory")]
+    NoDataDir,
+    #[error("error while reading the state file")]
+    ReadError(#[from] io::Error),
+    #[error("error while parsing the state file")]
+    ParseError(#[from] toml::de::Error),
+}
+
+/// An error that can occur when saving the state.
+#[derive(Debug, Error)]
+pub enum SaveError {
+    #[error("impossible to locate the state file: no data directory")]
+    NoDataDir,
+    #[error("error while writing to the state file")]
+    FsError(#[from] io::Error),
+}
+
 impl State {
     /// Creates empty tracking data.
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Loads the data.
-    pub fn load() -> io::Result<Self> {
-        let data_file =
-            dirs::data_dir().unwrap().join("track").join("data.toml");
+    /// Loads the state.
+    pub fn load() -> Result<Self, LoadError> {
+        let data_file = dirs::data_dir()
+            .ok_or(LoadError::NoDataDir)?
+            .join("track")
+            .join("data.toml");
 
         match fs::read_to_string(data_file) {
             Ok(contents) => {
@@ -50,18 +73,20 @@ impl State {
             }
             Err(e) => match e.kind() {
                 io::ErrorKind::NotFound => Ok(Self::new()),
-                _ => Err(e),
+                _ => Err(e.into()),
             },
         }
     }
 
-    /// Saves the data.
-    pub fn save(&self) -> io::Result<()> {
-        let data_dir = dirs::data_dir().unwrap().join("track");
+    /// Saves the state.
+    pub fn save(&self) -> Result<(), SaveError> {
+        let data_dir =
+            dirs::data_dir().ok_or(SaveError::NoDataDir)?.join("track");
         fs::create_dir_all(&data_dir)?;
 
         let data_file = data_dir.join("data.toml");
-        let data = toml::to_string(self).unwrap();
+        let data =
+            toml::to_string(self).expect("failed to serialise the state");
         fs::write(data_file, data)?;
 
         Ok(())
