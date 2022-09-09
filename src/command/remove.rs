@@ -29,20 +29,18 @@ impl super::Command for Remove {
     fn run(&self) -> Result<()> {
         let Self { tracking_number } = self;
 
-        let state = State::load()?;
+        let mut state = State::load()?;
 
-        let message = match state.parcels().get(tracking_number) {
-            Some(description) => {
-                state.remove_parcel(tracking_number).save()?;
-                format!(
-                    "{description} ({tracking_number}) is not tracked anymore."
-                )
-                .green()
-                .bold()
-            }
+        let message = match state.remove_parcel(tracking_number) {
+            Some(description) => format!(
+                "{description} ({tracking_number}) is not tracked anymore."
+            )
+            .green()
+            .bold(),
             None => format!("{tracking_number} was not tracked.").red().bold(),
         };
 
+        state.save()?;
         println!("{message}");
 
         Ok(())

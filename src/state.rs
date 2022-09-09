@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{fs, io};
+use std::{collections::HashMap, fs, io};
 
-use im::HashMap;
 use serde::{Deserialize, Serialize};
 
 /// The persistent state for `track`.
@@ -69,19 +68,21 @@ impl State {
     }
 
     /// Adds a parcel to track.
-    pub fn add_parcel(&self, tracking_number: &str, description: &str) -> Self {
-        Self {
-            parcels: self
-                .parcels
-                .update(tracking_number.to_owned(), description.to_owned()),
-        }
+    pub fn add_parcel(
+        &mut self,
+        tracking_number: &str,
+        description: &str,
+    ) -> Option<Description> {
+        self.parcels
+            .insert(tracking_number.to_owned(), description.to_owned())
     }
 
     /// Removes a parcel.
-    pub fn remove_parcel(&self, tracking_number: &str) -> Self {
-        Self {
-            parcels: self.parcels.without(tracking_number),
-        }
+    pub fn remove_parcel(
+        &mut self,
+        tracking_number: &str,
+    ) -> Option<Description> {
+        self.parcels.remove(tracking_number)
     }
 
     /// Returns the set of tracked parcels.
