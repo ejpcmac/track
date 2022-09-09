@@ -29,19 +29,20 @@ pub struct Add {
 
 impl super::Command for Add {
     fn run(&self) -> Result<()> {
-        let state = State::load()?;
-        state
-            .add_parcel(&self.tracking_number, &self.description)
-            .save()?;
+        let Self {
+            tracking_number,
+            description,
+        } = self;
 
-        let message = match state.parcels().get(&self.tracking_number) {
-            None => format!(
-                "{} ({}) is now tracked.",
-                self.description, self.tracking_number
-            ),
+        let state = State::load()?;
+        state.add_parcel(tracking_number, description).save()?;
+
+        let message = match state.parcels().get(tracking_number) {
+            None => {
+                format!("{description} ({tracking_number}) is now tracked.")
+            }
             Some(old_description) => format!(
-                "{} ({}) has been renamed to “{}”.",
-                old_description, self.tracking_number, self.description
+                "{old_description} ({tracking_number}) has been renamed to “{description}”."
             ),
         };
 

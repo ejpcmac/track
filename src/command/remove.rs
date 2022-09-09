@@ -27,18 +27,19 @@ pub struct Remove {
 
 impl super::Command for Remove {
     fn run(&self) -> Result<()> {
+        let Self { tracking_number } = self;
+
         let state = State::load()?;
 
-        let message = match state.parcels().get(&self.tracking_number) {
+        let message = match state.parcels().get(tracking_number) {
             Some(description) => {
-                state.remove_parcel(&self.tracking_number).save()?;
+                state.remove_parcel(tracking_number).save()?;
                 format!(
-                    "{} ({}) is not tracked anymore.",
-                    description, self.tracking_number
+                    "{description} ({tracking_number}) is not tracked anymore."
                 )
             }
             None => {
-                format!("{} was not tracked.", self.tracking_number)
+                format!("{tracking_number} was not tracked.")
             }
         };
 

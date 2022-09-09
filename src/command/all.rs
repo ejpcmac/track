@@ -35,8 +35,7 @@ impl super::Command for All {
 
                 for (tracking_number, description) in state.parcels() {
                     let message = format!(
-                        "\n--- {} ({}) ---\n",
-                        description, tracking_number
+                        "\n--- {description} ({tracking_number}) ---\n"
                     );
 
                     println!("{}", message.bold());

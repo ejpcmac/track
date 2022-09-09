@@ -28,7 +28,7 @@ impl super::Command for List {
 
         println!("\n{}\n", "--- Tracked parcels ---".bold());
         for (tracking_number, description) in state.parcels() {
-            println!("{}: {}", tracking_number, description);
+            println!("{tracking_number}: {description}");
         }
         println!();
 
