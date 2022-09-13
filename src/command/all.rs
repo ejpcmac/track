@@ -28,7 +28,7 @@ impl super::Command for All {
         match Config::load() {
             Ok(config) => {
                 let state = State::load()?;
-                let client = Client::new(config);
+                let client = Client::new(config)?;
 
                 for (tracking_number, description) in state.parcels() {
                     let message = format!(

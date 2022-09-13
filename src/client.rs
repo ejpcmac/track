@@ -16,8 +16,9 @@
 //! A quick-and-dirty client for the La Poste “Suivi v2” API.
 
 use chrono::{DateTime, Local};
-use reqwest::header::{self, HeaderMap};
+use reqwest::header::{self, HeaderMap, HeaderValue, InvalidHeaderValue};
 use serde::Deserialize;
+use thiserror::Error;
 
 use crate::config::Config;
 
@@ -47,21 +48,32 @@ pub struct Event {
     pub label: String,
 }
 
+/// An error that can occur when creating a new `Client`.
+#[derive(Debug, Error)]
+pub enum NewClientError {
+    #[error("invalid API key")]
+    InvalidApiKey(#[from] InvalidHeaderValue),
+    #[error("impossible to create a client")]
+    ClientBuilderError(#[from] reqwest::Error),
+}
+
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 impl Client {
     /// Creates a new `Client`.
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: Config) -> Result<Self, NewClientError> {
         let mut headers = HeaderMap::new();
-        headers.insert(header::ACCEPT, "application/json".parse().unwrap());
-        headers.insert("X-Okapi-Key", config.api_key().parse().unwrap());
+        headers.insert(
+            header::ACCEPT,
+            HeaderValue::from_static("application/json"),
+        );
+        headers.insert("X-Okapi-Key", config.api_key().parse()?);
 
         let reqwest_client = reqwest::blocking::Client::builder()
             .default_headers(headers)
-            .build()
-            .unwrap();
+            .build()?;
 
-        Self { reqwest_client }
+        Ok(Self { reqwest_client })
     }
 
     /// Retrieves the events for a parcel.
