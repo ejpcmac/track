@@ -19,6 +19,7 @@ use eyre::Result;
 
 use crate::state::State;
 
+/// Arguments for `track add`.
 #[derive(Debug, Parser)]
 pub struct Add {
     /// The tracking number.

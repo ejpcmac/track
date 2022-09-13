@@ -19,6 +19,7 @@ use eyre::Result;
 
 use crate::state::State;
 
+/// Arguments for `track remove`.
 #[derive(Debug, Parser)]
 pub struct Remove {
     /// The tracking number.

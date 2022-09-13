@@ -19,6 +19,7 @@ use eyre::Result;
 use super::helpers::*;
 use crate::{client::Client, config::Config};
 
+/// Arguments for `track info`.
 #[derive(Debug, Parser)]
 pub struct Info {
     /// The tracking number.

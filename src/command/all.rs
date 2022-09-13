@@ -20,6 +20,7 @@ use eyre::Result;
 use super::helpers::*;
 use crate::{client::Client, config::Config, state::State};
 
+/// Arguments for `track all`.
 #[derive(Debug, Parser)]
 pub struct All;
 

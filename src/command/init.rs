@@ -21,6 +21,7 @@ use eyre::Result;
 
 use crate::config::Config;
 
+/// Arguments for `track init`.
 #[derive(Debug, Parser)]
 pub struct Init {
     /// Force the init process.

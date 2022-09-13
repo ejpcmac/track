@@ -20,7 +20,7 @@ use reqwest::header::{self, HeaderMap, HeaderValue, InvalidHeaderValue};
 use serde::Deserialize;
 use thiserror::Error;
 
-/// An API client.
+/// A La Poste “Suivi v2” API client.
 #[derive(Debug)]
 pub struct Client {
     reqwest_client: reqwest::blocking::Client,
@@ -55,6 +55,7 @@ pub enum NewClientError {
     ClientBuilderError(#[from] reqwest::Error),
 }
 
+/// The API endpoint.
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 impl Client {

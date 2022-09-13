@@ -19,6 +19,7 @@ use eyre::Result;
 
 use crate::state::State;
 
+/// Arguments for `track list`.
 #[derive(Debug, Parser)]
 pub struct List;
 
