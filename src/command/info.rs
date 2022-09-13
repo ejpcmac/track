@@ -17,7 +17,7 @@ use clap::Parser;
 use eyre::Result;
 
 use super::helpers::*;
-use crate::client::{Client, Config};
+use crate::{client::Client, config::Config};
 
 #[derive(Debug, Parser)]
 pub struct Info {

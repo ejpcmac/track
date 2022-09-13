@@ -15,17 +15,11 @@
 
 //! A quick-and-dirty client for the La Poste “Suivi v2” API.
 
-use std::{fs, io};
-
 use chrono::{DateTime, Local};
 use reqwest::header::{self, HeaderMap};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-/// The client configuration.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    api_key: String,
-}
+use crate::config::Config;
 
 /// An API client.
 #[derive(Debug)]
@@ -55,44 +49,12 @@ pub struct Event {
 
 const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
-impl Config {
-    /// Creates a new configuration.
-    pub fn new(api_key: &str) -> Self {
-        Self {
-            api_key: api_key.to_owned(),
-        }
-    }
-
-    /// Loads the configuration.
-    pub fn load() -> io::Result<Self> {
-        let config_file = dirs::config_dir()
-            .unwrap()
-            .join("track")
-            .join("config.toml");
-        let contents = fs::read_to_string(config_file)?;
-        let config = toml::from_str(&contents)?;
-        Ok(config)
-    }
-
-    /// Saves the configuration.
-    pub fn save(&self) -> io::Result<()> {
-        let config_dir = dirs::config_dir().unwrap().join("track");
-        fs::create_dir_all(&config_dir)?;
-
-        let config_file = config_dir.join("config.toml");
-        let config = toml::to_string(self).unwrap();
-        fs::write(config_file, config)?;
-
-        Ok(())
-    }
-}
-
 impl Client {
     /// Creates a new `Client`.
     pub fn new(config: Config) -> Self {
         let mut headers = HeaderMap::new();
         headers.insert(header::ACCEPT, "application/json".parse().unwrap());
-        headers.insert("X-Okapi-Key", config.api_key.parse().unwrap());
+        headers.insert("X-Okapi-Key", config.api_key().parse().unwrap());
 
         let reqwest_client = reqwest::blocking::Client::builder()
             .default_headers(headers)

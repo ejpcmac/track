@@ -19,7 +19,7 @@ use clap::Parser;
 use colored::Colorize;
 use eyre::Result;
 
-use crate::client::Config;
+use crate::config::Config;
 
 #[derive(Debug, Parser)]
 pub struct Init {

@@ -24,6 +24,7 @@
 
 mod client;
 mod command;
+mod config;
 mod state;
 
 #[doc(hidden)]

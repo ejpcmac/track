@@ -18,10 +18,7 @@ use colored::Colorize;
 use eyre::Result;
 
 use super::helpers::*;
-use crate::{
-    client::{Client, Config},
-    state::State,
-};
+use crate::{client::Client, config::Config, state::State};
 
 #[derive(Debug, Parser)]
 pub struct All;
