@@ -20,8 +20,6 @@ use reqwest::header::{self, HeaderMap, HeaderValue, InvalidHeaderValue};
 use serde::Deserialize;
 use thiserror::Error;
 
-use crate::config::Config;
-
 /// An API client.
 #[derive(Debug)]
 pub struct Client {
@@ -61,13 +59,13 @@ const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 impl Client {
     /// Creates a new `Client`.
-    pub fn new(config: Config) -> Result<Self, NewClientError> {
+    pub fn new(api_key: &str) -> Result<Self, NewClientError> {
         let mut headers = HeaderMap::new();
         headers.insert(
             header::ACCEPT,
             HeaderValue::from_static("application/json"),
         );
-        headers.insert("X-Okapi-Key", config.api_key().parse()?);
+        headers.insert("X-Okapi-Key", api_key.parse()?);
 
         let reqwest_client = reqwest::blocking::Client::builder()
             .default_headers(headers)
