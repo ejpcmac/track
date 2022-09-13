@@ -14,7 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use color_eyre::Result;
+use eyre::Result;
 
 use super::helpers::*;
 use crate::client::{Client, Config};

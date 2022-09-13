@@ -22,7 +22,7 @@ mod list;
 mod remove;
 
 use clap::Parser;
-use color_eyre::Result;
+use eyre::Result;
 
 use self::{
     add::Add, all::All, info::Info, init::Init, list::List, remove::Remove,

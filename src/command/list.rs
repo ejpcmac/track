@@ -14,8 +14,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use color_eyre::Result;
 use colored::Colorize;
+use eyre::Result;
 
 use crate::state::State;
 

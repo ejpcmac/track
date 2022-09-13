@@ -23,7 +23,7 @@
 #![deny(unused_must_use)]
 #![forbid(unsafe_code)]
 
-use color_eyre::Result;
+use eyre::Result;
 
 use track::Track;
 

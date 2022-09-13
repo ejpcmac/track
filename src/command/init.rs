@@ -16,8 +16,8 @@
 use std::io::{self, Write};
 
 use clap::Parser;
-use color_eyre::Result;
 use colored::Colorize;
+use eyre::Result;
 
 use crate::client::Config;
 
