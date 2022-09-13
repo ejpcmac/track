@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::io::{self, Write};
-
 use clap::Parser;
 use colored::Colorize;
 use eyre::Result;
+use inquire::{length, Text};
 
 use crate::config::Config;
 
@@ -40,13 +39,14 @@ impl super::Command for Init {
             std::process::exit(1);
         }
 
-        let mut input = String::new();
+        let api_key = Text::new("La Poste API key:")
+            .with_validator(length!(
+                64,
+                "The API key must be 64-character long."
+            ))
+            .prompt()?;
 
-        print!("{}", "Enter your La Poste API key: ".bold());
-        io::stdout().flush()?;
-        io::stdin().read_line(&mut input)?;
-
-        Config::new(input.trim()).save()?;
+        Config::new(&api_key).save()?;
 
         println!(
             "{}",

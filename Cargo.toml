@@ -13,6 +13,7 @@ color-eyre = "0.6"
 colored = "2.0"
 dirs = "4.0"
 eyre = "0.6"
+inquire = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 thiserror = "1.0"
 toml = "0.5"
