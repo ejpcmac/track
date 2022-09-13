@@ -36,8 +36,10 @@ impl super::Command for Add {
         } = self;
 
         let mut state = State::load()?;
+        let added = state.add_parcel(tracking_number, description);
+        state.save()?;
 
-        let message = match state.add_parcel(tracking_number, description) {
+        let message = match added {
             None => {
                 format!("{description} ({tracking_number}) is now tracked.")
             }
@@ -46,9 +48,7 @@ impl super::Command for Add {
             ),
         };
 
-        state.save()?;
         println!("{}", message.green().bold());
-
         Ok(())
     }
 }

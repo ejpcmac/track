@@ -31,8 +31,10 @@ impl super::Command for Remove {
         let Self { tracking_number } = self;
 
         let mut state = State::load()?;
+        let removed = state.remove_parcel(tracking_number);
+        state.save()?;
 
-        let message = match state.remove_parcel(tracking_number) {
+        let message = match removed {
             Some(description) => format!(
                 "{description} ({tracking_number}) is not tracked anymore."
             )
@@ -41,9 +43,7 @@ impl super::Command for Remove {
             None => format!("{tracking_number} was not tracked.").red().bold(),
         };
 
-        state.save()?;
         println!("{message}");
-
         Ok(())
     }
 }

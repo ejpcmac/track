@@ -46,8 +46,7 @@ impl super::Command for Init {
         io::stdout().flush()?;
         io::stdin().read_line(&mut input)?;
 
-        let config = Config::new(input.trim());
-        config.save()?;
+        Config::new(input.trim()).save()?;
 
         println!(
             "{}",
