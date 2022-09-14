@@ -15,12 +15,7 @@
 
 use colored::Colorize;
 
-use crate::{client::Event, error, hint};
-
-pub fn no_config_message() {
-    error!("The configuration is absent or invalid.");
-    hint!("You can create a configuration by running `track init`.");
-}
+use crate::client::Event;
 
 pub fn print_events(events: &[Event]) {
     for event in events.iter().rev() {

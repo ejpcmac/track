@@ -28,14 +28,10 @@ pub struct Info {
 
 impl super::Command for Info {
     fn run(&self) -> Result<()> {
-        match Config::load() {
-            Ok(config) => {
-                let client = Client::new(config.api_key())?;
-                let events = client.get_events(&self.tracking_number)?;
-                print_events(&events);
-            }
-            Err(_) => no_config_message(),
-        }
+        let config = Config::load()?;
+        let client = Client::new(config.api_key())?;
+        let events = client.get_events(&self.tracking_number)?;
+        print_events(&events);
 
         Ok(())
     }

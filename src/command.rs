@@ -24,6 +24,8 @@ mod remove;
 use clap::Parser;
 use eyre::Result;
 
+use crate::{config, error, hint};
+
 use self::{
     add::Add, all::All, info::Info, init::Init, list::List, remove::Remove,
 };
@@ -54,13 +56,28 @@ trait Command {
 impl Track {
     /// Runs track.
     pub fn run() -> Result<()> {
-        match Self::parse() {
+        let result = match Self::parse() {
             Self::Init(init) => init.run(),
             Self::Info(info) => info.run(),
             Self::List(list) => list.run(),
             Self::Add(add) => add.run(),
             Self::Remove(remove) => remove.run(),
             Self::All(all) => all.run(),
+        };
+
+        match result {
+            Err(e) => handle_errors(e),
+            Ok(()) => Ok(()),
         }
+    }
+}
+
+fn handle_errors(e: color_eyre::Report) -> Result<()> {
+    if e.downcast_ref::<config::LoadError>().is_some() {
+        error!("The configuration is absent or invalid.");
+        hint!("You can create a configuration by running `track init`.");
+        std::process::exit(1);
+    } else {
+        Err(e)
     }
 }
