@@ -14,10 +14,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use colored::Colorize;
 use eyre::Result;
 
-use crate::state::State;
+use crate::{state::State, success};
 
 /// Arguments for `track add`.
 #[derive(Debug, Parser)]
@@ -39,16 +38,15 @@ impl super::Command for Add {
         let added = state.add_parcel(tracking_number, description);
         state.save()?;
 
-        let message = match added {
+        match added {
             None => {
-                format!("{description} ({tracking_number}) is now tracked.")
+                success!("{description} ({tracking_number}) is now tracked.")
             }
-            Some(old_description) => format!(
+            Some(old_description) => success!(
                 "{old_description} ({tracking_number}) has been renamed to “{description}”."
             ),
         };
 
-        println!("{}", message.green().bold());
         Ok(())
     }
 }

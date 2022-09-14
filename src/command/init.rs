@@ -14,11 +14,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use colored::Colorize;
 use eyre::Result;
 use inquire::{length, Text};
 
-use crate::config::Config;
+use crate::{config::Config, error, hint, success};
 
 /// Arguments for `track init`.
 #[derive(Debug, Parser)]
@@ -31,11 +30,8 @@ pub struct Init {
 impl super::Command for Init {
     fn run(&self) -> Result<()> {
         if !self.force && Config::load().is_ok() {
-            println!(
-                "{}\n{}",
-                "There is already a configuration.".red().bold(),
-                "You can force the command by running `track init -f`.".blue()
-            );
+            error!("There is already a configuration.");
+            hint!("You can force the command by running `track init -f`.");
             std::process::exit(1);
         }
 
@@ -48,11 +44,7 @@ impl super::Command for Init {
 
         Config::new(&api_key).save()?;
 
-        println!(
-            "{}",
-            "The configuration has been initialised.".green().bold()
-        );
-
+        success!("The configuration has been initialised.");
         Ok(())
     }
 }

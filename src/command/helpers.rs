@@ -15,14 +15,11 @@
 
 use colored::Colorize;
 
-use crate::client::Event;
+use crate::{client::Event, error, hint};
 
 pub fn no_config_message() {
-    println!(
-        "{}\n{}",
-        "The configuration is absent or invalid.".red().bold(),
-        "You can create a configuration by running `track init`.".blue()
-    );
+    error!("The configuration is absent or invalid.");
+    hint!("You can create a configuration by running `track init`.");
 }
 
 pub fn print_events(events: &[Event]) {
@@ -30,4 +27,34 @@ pub fn print_events(events: &[Event]) {
         let date = format!("{}:", event.date.to_rfc2822());
         println!("{} {}", date.bright_black(), event.label);
     }
+}
+
+/// Prints a success.
+#[macro_export]
+macro_rules! success {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).green().bold();
+        println!("{message}");
+    }};
+}
+
+/// Prints an error.
+#[macro_export]
+macro_rules! error {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).red().bold();
+        println!("{message}");
+    }};
+}
+
+/// Prints a hint.
+#[macro_export]
+macro_rules! hint {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).blue();
+        println!("{message}");
+    }};
 }

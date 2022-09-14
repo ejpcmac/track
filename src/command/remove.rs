@@ -14,12 +14,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use colored::Colorize;
 use eyre::{eyre, Result};
 use inquire::Select;
 use regex::Regex;
 
-use crate::state::State;
+use crate::{state::State, success};
 
 /// Arguments for `track remove`.
 #[derive(Debug, Parser)]
@@ -43,15 +42,7 @@ impl super::Command for Remove {
 
         state.save()?;
 
-        println!(
-            "{}",
-            format!(
-                "{description} ({tracking_number}) is not tracked anymore."
-            )
-            .green()
-            .bold()
-        );
-
+        success!("{description} ({tracking_number}) is not tracked anymore.");
         Ok(())
     }
 }
