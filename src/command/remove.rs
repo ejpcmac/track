@@ -14,7 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use eyre::{eyre, Result};
+use eyre::{bail, eyre, Result};
 use inquire::Select;
 use regex::Regex;
 
@@ -52,7 +52,7 @@ fn ask_parcel(state: &State) -> Result<String> {
     let parcels = state.parcels();
 
     if parcels.is_empty() {
-        return Err(eyre!("there are no tracked parcels"));
+        bail!("there are no tracked parcels");
     }
 
     let options = parcels.iter().map(to_option).collect();
