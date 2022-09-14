@@ -16,8 +16,9 @@
 use clap::Parser;
 use eyre::Result;
 
-use super::helpers::*;
 use crate::{client::Client, config::Config};
+
+use super::helpers::print_events;
 
 /// Arguments for `track info`.
 #[derive(Debug, Parser)]

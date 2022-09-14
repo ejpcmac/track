@@ -17,8 +17,9 @@ use clap::Parser;
 use colored::Colorize;
 use eyre::Result;
 
-use super::helpers::*;
 use crate::{client::Client, config::Config, state::State};
+
+use super::helpers::print_events;
 
 /// Arguments for `track all`.
 #[derive(Debug, Parser)]
