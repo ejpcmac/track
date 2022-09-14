@@ -32,7 +32,7 @@ use self::{
     info::Info,
     init::{Init, InitError},
     list::List,
-    remove::Remove,
+    remove::{Remove, RemoveError},
 };
 
 /// A quick-and-dirty CLI tool for tracking parcels.
@@ -89,6 +89,9 @@ fn handle_errors(e: color_eyre::Report) -> Result<()> {
                 hint!("You can force the command by running `track init -f`.");
             }
         }
+        std::process::exit(1);
+    } else if let Some(e) = e.downcast_ref::<RemoveError>() {
+        error!("{e}");
         std::process::exit(1);
     } else {
         Err(e)

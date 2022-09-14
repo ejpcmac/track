@@ -14,9 +14,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use eyre::{bail, eyre, Result};
+use eyre::{bail, Result};
 use inquire::Select;
 use regex::Regex;
+use thiserror::Error;
 
 use crate::{state::State, success};
 
@@ -25,6 +26,14 @@ use crate::{state::State, success};
 pub struct Remove {
     /// The tracking number.
     tracking_number: Option<String>,
+}
+
+#[derive(Debug, Error)]
+pub enum RemoveError {
+    #[error("There are no tracked parcels.")]
+    NoParcel,
+    #[error("{0} was not tracked.")]
+    NotTracked(String),
 }
 
 impl super::Command for Remove {
@@ -38,7 +47,7 @@ impl super::Command for Remove {
 
         let description = state
             .remove_parcel(&tracking_number)
-            .ok_or_else(|| eyre!("{tracking_number} was not tracked"))?;
+            .ok_or_else(|| RemoveError::NotTracked(tracking_number.clone()))?;
 
         state.save()?;
 
@@ -52,7 +61,7 @@ fn ask_parcel(state: &State) -> Result<String> {
     let parcels = state.parcels();
 
     if parcels.is_empty() {
-        bail!("there are no tracked parcels");
+        bail!(RemoveError::NoParcel);
     }
 
     let options = parcels.iter().map(to_option).collect();
