@@ -14,10 +14,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use colored::Colorize;
 use eyre::Result;
 
-use crate::{client::Client, config::Config, state::State};
+use crate::{client::Client, config::Config, state::State, title};
 
 use super::helpers::print_events;
 
@@ -32,10 +31,7 @@ impl super::Command for All {
         let client = Client::new(config.api_key())?;
 
         for (tracking_number, description) in state.parcels() {
-            let message =
-                format!("\n--- {description} ({tracking_number}) ---\n");
-
-            println!("{}", message.bold());
+            title!("\n--- {description} ({tracking_number}) ---\n");
             let events = client.get_events(tracking_number)?;
             print_events(&events);
             println!();

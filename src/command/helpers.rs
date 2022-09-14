@@ -53,3 +53,13 @@ macro_rules! hint {
         println!("{message}");
     }};
 }
+
+/// Prints a title.
+#[macro_export]
+macro_rules! title {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).bold();
+        println!("{message}");
+    }};
+}
