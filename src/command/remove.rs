@@ -28,6 +28,7 @@ pub struct Remove {
     tracking_number: Option<String>,
 }
 
+/// Usage errors of `track remove`.
 #[derive(Debug, Error)]
 pub enum RemoveError {
     #[error("There are no tracked parcels.")]

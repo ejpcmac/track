@@ -28,6 +28,7 @@ pub struct Init {
     force: bool,
 }
 
+/// Usage errors of `track init`.
 #[derive(Debug, Error)]
 pub enum InitError {
     #[error("There is already a configuration.")]
