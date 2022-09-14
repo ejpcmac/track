@@ -115,12 +115,14 @@ impl State {
     }
 }
 
+/// Gets the data directory for `track`.
 fn data_dir() -> Result<PathBuf, DataDirError> {
     Ok(dirs::data_dir()
         .ok_or(DataDirError::NoDataDir)?
         .join(env!("CARGO_PKG_NAME")))
 }
 
+/// Gets the state file for `track`.
 fn state_file() -> Result<PathBuf, DataDirError> {
     Ok(data_dir()?.join(STATE_FILE_NAME))
 }

@@ -88,12 +88,14 @@ impl Config {
     }
 }
 
+/// Gets the config directory for `track`.
 fn config_dir() -> Result<PathBuf, ConfigDirError> {
     Ok(dirs::config_dir()
         .ok_or(ConfigDirError::NoConfigDir)?
         .join(env!("CARGO_PKG_NAME")))
 }
 
+/// Gets the config file for `track`.
 fn config_file() -> Result<PathBuf, ConfigDirError> {
     Ok(config_dir()?.join(CONFIG_FILE_NAME))
 }
