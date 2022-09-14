@@ -27,7 +27,12 @@ use eyre::Result;
 use crate::{config, error, hint};
 
 use self::{
-    add::Add, all::All, info::Info, init::Init, list::List, remove::Remove,
+    add::Add,
+    all::All,
+    info::Info,
+    init::{Init, InitError},
+    list::List,
+    remove::Remove,
 };
 
 /// A quick-and-dirty CLI tool for tracking parcels.
@@ -76,6 +81,14 @@ fn handle_errors(e: color_eyre::Report) -> Result<()> {
     if e.downcast_ref::<config::LoadError>().is_some() {
         error!("The configuration is absent or invalid.");
         hint!("You can create a configuration by running `track init`.");
+        std::process::exit(1);
+    } else if let Some(e) = e.downcast_ref::<InitError>() {
+        match e {
+            InitError::ExistingConfig => {
+                error!("{e}");
+                hint!("You can force the command by running `track init -f`.");
+            }
+        }
         std::process::exit(1);
     } else {
         Err(e)

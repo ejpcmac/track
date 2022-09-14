@@ -14,10 +14,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use eyre::Result;
+use eyre::{bail, Result};
 use inquire::{length, Text};
+use thiserror::Error;
 
-use crate::{config::Config, error, hint, success};
+use crate::{config::Config, success};
 
 /// Arguments for `track init`.
 #[derive(Debug, Parser)]
@@ -27,12 +28,16 @@ pub struct Init {
     force: bool,
 }
 
+#[derive(Debug, Error)]
+pub enum InitError {
+    #[error("There is already a configuration.")]
+    ExistingConfig,
+}
+
 impl super::Command for Init {
     fn run(&self) -> Result<()> {
         if !self.force && Config::load().is_ok() {
-            error!("There is already a configuration.");
-            hint!("You can force the command by running `track init -f`.");
-            std::process::exit(1);
+            bail!(InitError::ExistingConfig);
         }
 
         let api_key = Text::new("La Poste API key:")
