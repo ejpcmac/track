@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 * **BREAKING** Rename the state file from `<DATA_DIR>/track/data.toml` to
     `<DATA_DIR>/track/state.toml`.
 * **BREAKING** Make the library APIs private.
+* [`track remove`] Make it interactive if the tracking number is left
+    unspecified.
 * Update the dependencies.
 
 ## [0.1.1] - 2020-10-29

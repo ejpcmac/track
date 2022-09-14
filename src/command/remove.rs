@@ -15,7 +15,9 @@
 
 use clap::Parser;
 use colored::Colorize;
-use eyre::Result;
+use eyre::{eyre, Result};
+use inquire::Select;
+use regex::Regex;
 
 use crate::state::State;
 
@@ -23,27 +25,64 @@ use crate::state::State;
 #[derive(Debug, Parser)]
 pub struct Remove {
     /// The tracking number.
-    tracking_number: String,
+    tracking_number: Option<String>,
 }
 
 impl super::Command for Remove {
     fn run(&self) -> Result<()> {
-        let Self { tracking_number } = self;
-
         let mut state = State::load()?;
-        let removed = state.remove_parcel(tracking_number);
+
+        let tracking_number = match self.tracking_number.to_owned() {
+            Some(value) => value,
+            None => ask_parcel(&state)?,
+        };
+
+        let description = state
+            .remove_parcel(&tracking_number)
+            .ok_or_else(|| eyre!("{tracking_number} was not tracked"))?;
+
         state.save()?;
 
-        let message = match removed {
-            Some(description) => format!(
+        println!(
+            "{}",
+            format!(
                 "{description} ({tracking_number}) is not tracked anymore."
             )
             .green()
-            .bold(),
-            None => format!("{tracking_number} was not tracked.").red().bold(),
-        };
+            .bold()
+        );
 
-        println!("{message}");
         Ok(())
     }
+}
+
+/// Asks for the parcel to delete.
+fn ask_parcel(state: &State) -> Result<String> {
+    let parcels = state.parcels();
+
+    if parcels.is_empty() {
+        return Err(eyre!("there are no tracked parcels"));
+    }
+
+    let options = parcels.iter().map(to_option).collect();
+    let selected = Select::new("Parcel to remove", options).prompt()?;
+    let tracking_number = extract_tracking_number(&selected)?;
+
+    Ok(tracking_number)
+}
+
+/// Builds an option from a parcel tuple.
+fn to_option(parcel: (&String, &String)) -> String {
+    let (tracking_number, description) = parcel;
+    format!("{tracking_number}: {description}")
+}
+
+/// Extracts the tracking number from a selected option.
+fn extract_tracking_number(option: &str) -> Result<String> {
+    let pattern = Regex::new(r"^(\w+): .*$")?;
+    let captures = pattern
+        .captures(option)
+        .expect("failed to extract the tracking number from the selection");
+    let tracking_number = captures[1].to_owned();
+    Ok(tracking_number)
 }
