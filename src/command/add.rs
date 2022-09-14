@@ -35,10 +35,10 @@ impl super::Command for Add {
         } = self;
 
         let mut state = State::load()?;
-        let added = state.add_parcel(tracking_number, description);
+        let old = state.add_parcel(tracking_number, description);
         state.save()?;
 
-        match added {
+        match old {
             None => {
                 success!("{description} ({tracking_number}) is now tracked.")
             }
