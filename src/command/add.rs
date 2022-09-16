@@ -15,6 +15,7 @@
 
 use clap::Parser;
 use eyre::Result;
+use inquire::Text;
 
 use crate::{state::State, success};
 
@@ -22,20 +23,25 @@ use crate::{state::State, success};
 #[derive(Debug, Parser)]
 pub struct Add {
     /// The tracking number.
-    tracking_number: String,
+    tracking_number: Option<String>,
     /// A description for the parcel.
-    description: String,
+    description: Option<String>,
 }
 
 impl super::Command for Add {
     fn run(&self) -> Result<()> {
-        let Self {
-            tracking_number,
-            description,
-        } = self;
+        let tracking_number = match self.tracking_number.to_owned() {
+            Some(value) => value,
+            None => ask_tracking_number()?,
+        };
+
+        let description = match self.description.to_owned() {
+            Some(value) => value,
+            None => ask_description()?,
+        };
 
         let mut state = State::load()?;
-        let old = state.add_parcel(tracking_number, description);
+        let old = state.add_parcel(&tracking_number, &description);
         state.save()?;
 
         match old {
@@ -49,4 +55,14 @@ impl super::Command for Add {
 
         Ok(())
     }
+}
+
+/// Asks for the tracking number.
+fn ask_tracking_number() -> Result<String> {
+    Ok(Text::new("Tracking number:").prompt()?)
+}
+
+/// Asks for a description.
+fn ask_description() -> Result<String> {
+    Ok(Text::new("Description:").prompt()?)
 }
