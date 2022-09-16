@@ -66,7 +66,7 @@ fn ask_parcel(state: &State) -> Result<String> {
     }
 
     let options = parcels.iter().map(to_option).collect();
-    let selected = Select::new("Parcel to remove", options).prompt()?;
+    let selected = Select::new("Parcel to remove:", options).prompt()?;
     let tracking_number = extract_tracking_number(&selected)?;
 
     Ok(tracking_number)
