@@ -24,11 +24,15 @@ pub fn render(
     events: &[Event],
 ) {
     if let Some(description) = description {
-        title!("\n--- {description} ({tracking_number}) ---\n");
+        title!("\n--- {description} ({tracking_number}) ---\n")
+    } else {
+        title!("\n--- {tracking_number} ---\n")
     }
 
     for event in events.iter().rev() {
         let date = format!("{}:", event.date.to_rfc2822());
         println!("{} {}", date.bright_black(), event.label);
     }
+
+    println!();
 }

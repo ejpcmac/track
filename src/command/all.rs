@@ -37,7 +37,6 @@ impl super::Command for All {
                 ))?;
 
             tracking_info::render(tracking_number, Some(description), &events);
-            println!();
         }
 
         Ok(())
