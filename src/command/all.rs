@@ -14,7 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use eyre::Result;
+use eyre::{Result, WrapErr};
 
 use crate::{
     client::Client, config::Config, state::State, views::tracking_info,
@@ -31,7 +31,11 @@ impl super::Command for All {
         let client = Client::new(config.api_key())?;
 
         for (tracking_number, description) in state.parcels() {
-            let events = client.get_events(tracking_number)?;
+            let events =
+                client.get_events(tracking_number).wrap_err_with(|| format!(
+                    "error getting tracking info for {description} ({tracking_number})"
+                ))?;
+
             tracking_info::render(tracking_number, Some(description), &events);
             println!();
         }

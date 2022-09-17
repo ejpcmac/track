@@ -14,7 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::Parser;
-use eyre::Result;
+use eyre::{Result, WrapErr};
 
 use crate::{client::Client, config::Config, views::tracking_info};
 
@@ -27,9 +27,15 @@ pub struct Info {
 
 impl super::Command for Info {
     fn run(&self) -> Result<()> {
+        let Info { tracking_number } = self;
         let config = Config::load()?;
         let client = Client::new(config.api_key())?;
-        let events = client.get_events(&self.tracking_number)?;
+
+        let events =
+            client.get_events(tracking_number).wrap_err_with(|| {
+                format!("error getting tracking info for {tracking_number}")
+            })?;
+
         tracking_info::render(&self.tracking_number, None, &events);
 
         Ok(())
