@@ -26,6 +26,7 @@ mod client;
 mod command;
 mod config;
 mod state;
+mod views;
 
 #[doc(hidden)]
 pub use command::Track;

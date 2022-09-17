@@ -16,9 +16,9 @@
 use clap::Parser;
 use eyre::Result;
 
-use crate::{client::Client, config::Config, state::State, title};
-
-use super::helpers::print_events;
+use crate::{
+    client::Client, config::Config, state::State, title, views::tracking_info,
+};
 
 /// Arguments for `track all`.
 #[derive(Debug, Parser)]
@@ -33,7 +33,7 @@ impl super::Command for All {
         for (tracking_number, description) in state.parcels() {
             title!("\n--- {description} ({tracking_number}) ---\n");
             let events = client.get_events(tracking_number)?;
-            print_events(&events);
+            tracking_info::render(&events);
             println!();
         }
 

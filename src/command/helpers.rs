@@ -13,17 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use colored::Colorize;
-
-use crate::client::Event;
-
-pub fn print_events(events: &[Event]) {
-    for event in events.iter().rev() {
-        let date = format!("{}:", event.date.to_rfc2822());
-        println!("{} {}", date.bright_black(), event.label);
-    }
-}
-
 /// Prints a success.
 #[macro_export]
 macro_rules! success {
