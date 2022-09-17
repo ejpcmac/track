@@ -15,10 +15,18 @@
 
 use colored::Colorize;
 
-use crate::client::Event;
+use crate::{client::Event, title};
 
 /// Renders tracking info.
-pub fn render(events: &[Event]) {
+pub fn render(
+    tracking_number: &str,
+    description: Option<&str>,
+    events: &[Event],
+) {
+    if let Some(description) = description {
+        title!("\n--- {description} ({tracking_number}) ---\n");
+    }
+
     for event in events.iter().rev() {
         let date = format!("{}:", event.date.to_rfc2822());
         println!("{} {}", date.bright_black(), event.label);

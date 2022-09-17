@@ -30,7 +30,7 @@ impl super::Command for Info {
         let config = Config::load()?;
         let client = Client::new(config.api_key())?;
         let events = client.get_events(&self.tracking_number)?;
-        tracking_info::render(&events);
+        tracking_info::render(&self.tracking_number, None, &events);
 
         Ok(())
     }
