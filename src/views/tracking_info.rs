@@ -13,8 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use std::fmt::Write;
+
 use colored::Colorize;
 use derive_new::new;
+use eyre::Result;
 
 use crate::{client::Event, title};
 
@@ -28,24 +31,29 @@ pub struct TrackingInfo<'a> {
 
 impl<'a> TrackingInfo<'a> {
     /// Renders tracking info.
-    pub fn render(&self) {
+    pub fn render(&self) -> Result<String> {
         let Self {
             tracking_number,
             description,
             events,
         } = self;
 
+        let mut rendered = String::new();
+
         if let Some(description) = description {
-            title!("\n--- {description} ({tracking_number}) ---\n")
+            title!(
+                &mut rendered,
+                "\n--- {description} ({tracking_number}) ---\n"
+            )?;
         } else {
-            title!("\n--- {tracking_number} ---\n")
+            title!(&mut rendered, "\n--- {tracking_number} ---\n")?;
         }
 
         for event in events.iter().rev() {
             let date = format!("{}:", event.date.to_rfc2822());
-            println!("{} {}", date.bright_black(), event.label);
+            writeln!(&mut rendered, "{} {}", date.bright_black(), event.label)?;
         }
 
-        println!();
+        Ok(rendered)
     }
 }

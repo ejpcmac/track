@@ -38,7 +38,9 @@ impl super::Command for Info {
                 format!("error getting tracking info for {tracking_number}")
             })?;
 
-        TrackingInfo::new(tracking_number, None, &events).render();
+        let view =
+            TrackingInfo::new(tracking_number, None, &events).render()?;
+        println!("{view}");
 
         Ok(())
     }

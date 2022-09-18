@@ -37,8 +37,10 @@ impl super::Command for All {
                     "error getting tracking info for {description} ({tracking_number})"
                 ))?;
 
-            TrackingInfo::new(tracking_number, Some(description), &events)
-                .render();
+            let view =
+                TrackingInfo::new(tracking_number, Some(description), &events)
+                    .render()?;
+            println!("{view}");
         }
 
         Ok(())
