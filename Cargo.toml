@@ -11,6 +11,7 @@ chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "3.2", features = ["derive"] }
 color-eyre = "0.6"
 colored = "2.0"
+derive-new = "0.5"
 dirs = "4.0"
 eyre = "0.6"
 inquire = "0.3"
