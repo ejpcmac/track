@@ -16,7 +16,9 @@
 use clap::Parser;
 use eyre::{Result, WrapErr};
 
-use crate::{client::Client, config::Config, views::tracking_info};
+use crate::{
+    client::Client, config::Config, views::tracking_info::TrackingInfo,
+};
 
 /// Arguments for `track info`.
 #[derive(Debug, Parser)]
@@ -36,7 +38,7 @@ impl super::Command for Info {
                 format!("error getting tracking info for {tracking_number}")
             })?;
 
-        tracking_info::render(&self.tracking_number, None, &events);
+        TrackingInfo::new(tracking_number, None, &events).render();
 
         Ok(())
     }

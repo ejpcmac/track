@@ -17,22 +17,47 @@ use colored::Colorize;
 
 use crate::{client::Event, title};
 
-/// Renders tracking info.
-pub fn render(
-    tracking_number: &str,
-    description: Option<&str>,
-    events: &[Event],
-) {
-    if let Some(description) = description {
-        title!("\n--- {description} ({tracking_number}) ---\n")
-    } else {
-        title!("\n--- {tracking_number} ---\n")
+/// A tracking info view.
+#[derive(Debug)]
+pub struct TrackingInfo<'a> {
+    tracking_number: &'a str,
+    description: Option<&'a str>,
+    events: &'a [Event],
+}
+
+impl<'a> TrackingInfo<'a> {
+    /// Build a new tracking info view.
+    pub fn new(
+        tracking_number: &'a str,
+        description: Option<&'a str>,
+        events: &'a [Event],
+    ) -> Self {
+        Self {
+            tracking_number,
+            description,
+            events,
+        }
     }
 
-    for event in events.iter().rev() {
-        let date = format!("{}:", event.date.to_rfc2822());
-        println!("{} {}", date.bright_black(), event.label);
-    }
+    /// Renders tracking info.
+    pub fn render(&self) {
+        let Self {
+            tracking_number,
+            description,
+            events,
+        } = self;
 
-    println!();
+        if let Some(description) = description {
+            title!("\n--- {description} ({tracking_number}) ---\n")
+        } else {
+            title!("\n--- {tracking_number} ---\n")
+        }
+
+        for event in events.iter().rev() {
+            let date = format!("{}:", event.date.to_rfc2822());
+            println!("{} {}", date.bright_black(), event.label);
+        }
+
+        println!();
+    }
 }
