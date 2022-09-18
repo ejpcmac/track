@@ -48,7 +48,7 @@ impl super::Command for Init {
             ))
             .prompt()?;
 
-        Config::new(&api_key).save()?;
+        Config::new(api_key).save()?;
 
         success!("The configuration has been initialised.");
         Ok(())

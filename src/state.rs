@@ -64,17 +64,12 @@ pub enum DataDirError {
 const STATE_FILE_NAME: &str = "state.toml";
 
 impl State {
-    /// Creates empty state.
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     /// Loads the state.
     pub fn load() -> Result<Self, LoadError> {
         match fs::read_to_string(state_file()?) {
             Ok(state) => Ok(toml::from_str(&state)?),
             Err(e) => match e.kind() {
-                io::ErrorKind::NotFound => Ok(Self::new()),
+                io::ErrorKind::NotFound => Ok(Self::default()),
                 _ => Err(e.into()),
             },
         }

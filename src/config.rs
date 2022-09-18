@@ -15,11 +15,12 @@
 
 use std::{fs, io, path::PathBuf};
 
+use derive_new::new;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// The configuration for `track`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(new, Debug, Serialize, Deserialize)]
 pub struct Config {
     api_key: String,
 }
@@ -55,13 +56,6 @@ pub enum ConfigDirError {
 const CONFIG_FILE_NAME: &str = "config.toml";
 
 impl Config {
-    /// Creates a new configuration.
-    pub fn new(api_key: &str) -> Self {
-        Self {
-            api_key: api_key.to_owned(),
-        }
-    }
-
     /// Loads the configuration.
     pub fn load() -> Result<Self, LoadError> {
         let config_file = config_file()?;

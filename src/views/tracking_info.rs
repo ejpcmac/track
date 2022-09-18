@@ -14,11 +14,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use colored::Colorize;
+use derive_new::new;
 
 use crate::{client::Event, title};
 
 /// A tracking info view.
-#[derive(Debug)]
+#[derive(new, Debug)]
 pub struct TrackingInfo<'a> {
     tracking_number: &'a str,
     description: Option<&'a str>,
@@ -26,19 +27,6 @@ pub struct TrackingInfo<'a> {
 }
 
 impl<'a> TrackingInfo<'a> {
-    /// Build a new tracking info view.
-    pub fn new(
-        tracking_number: &'a str,
-        description: Option<&'a str>,
-        events: &'a [Event],
-    ) -> Self {
-        Self {
-            tracking_number,
-            description,
-            events,
-        }
-    }
-
     /// Renders tracking info.
     pub fn render(&self) {
         let Self {
