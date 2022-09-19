@@ -15,7 +15,7 @@
 
 use clap::Parser;
 use eyre::Result;
-use inquire::Text;
+use inquire::{required, Text};
 
 use crate::{state::State, success};
 
@@ -59,7 +59,9 @@ impl super::Command for Add {
 
 /// Asks for the tracking number.
 fn ask_tracking_number() -> Result<String> {
-    Ok(Text::new("Tracking number:").prompt()?)
+    Ok(Text::new("Tracking number:")
+        .with_validator(required!("Please enter a tracking number."))
+        .prompt()?)
 }
 
 /// Asks for a description.
