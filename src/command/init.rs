@@ -15,7 +15,7 @@
 
 use clap::Parser;
 use eyre::{bail, Result};
-use inquire::{length, Text};
+use inquire::Text;
 use thiserror::Error;
 
 use crate::{config::Config, success};
@@ -41,13 +41,7 @@ impl super::Command for Init {
             bail!(InitError::ExistingConfig);
         }
 
-        let api_key = Text::new("La Poste API key:")
-            .with_validator(length!(
-                64,
-                "The API key must be 64-character long."
-            ))
-            .prompt()?;
-
+        let api_key = Text::new("La Poste API key:").prompt()?;
         Config::new(api_key).save()?;
 
         success!("The configuration has been initialised.");
