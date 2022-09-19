@@ -13,18 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use askama::Template;
-use derive_new::new;
+//! Filters for Askama templates.
 
-use crate::client::Event;
+use colored::Colorize;
 
-use super::askama_filters as filters;
+/// Decorates the string in bold.
+pub fn bold(s: &str) -> askama::Result<String> {
+    Ok(s.bold().to_string())
+}
 
-/// A tracking info view.
-#[derive(new, Debug, Template)]
-#[template(path = "tracking_info")]
-pub struct TrackingInfo<'a> {
-    tracking_number: &'a str,
-    description: Option<&'a str>,
-    events: &'a [Event],
+/// Decorates the string in bright black.
+pub fn bright_black(s: &str) -> askama::Result<String> {
+    Ok(s.bright_black().to_string())
 }
