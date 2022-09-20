@@ -37,7 +37,7 @@ use self::{
 
 /// A quick-and-dirty CLI tool for tracking parcels.
 #[derive(Debug, Parser)]
-#[clap(version, author)]
+#[clap(author, version = env!("VERSION_WITH_GIT"))]
 pub enum Track {
     /// Initialise the configuration.
     Init(Init),
