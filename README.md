@@ -5,15 +5,16 @@ API](https://developer.laposte.fr/products/suivi/latest).
 
 ## Rationale
 
-At the time of writing this tool, I am in some place with a really slow internet
-access. This means refreshing the tracking information page on
-[laposte.fr](https://www.laposte.fr/outils/suivre-vos-envois) takes minutes. As
-I want to be able to track my parcels with a very low bandwidth impact, I had
-the idea of using their public tracking API to do this from my terminal.
+At the time of writing the first version of this tool, I was in some place with
+a really slow internet access. This means refreshing the tracking information
+page on [laposte.fr](https://www.laposte.fr/outils/suivre-vos-envois) was taking
+minutes. As I wanted to be able to track my parcels with a very low bandwidth
+impact, I had the idea of using their public tracking API to do this from my
+terminal.
 
 In my browser, I used to keep some tabs open to track incoming parcels. With
 `track`, I can now register which parcels to track and get an overview pretty
-quickly. I am sure it will be helpful even with a high-speed internet access.
+quickly, even with a high-speed internet access.
 
 ## Setup
 
@@ -40,9 +41,12 @@ You can track an individual parcel:
 
 If you want to track a few parcels regularly, you can add them:
 
-    $ track add <tracking_number> <description>
+    $ track add [tracking_number] [description]
 
-Then get their status:
+If you call `track add` without parameters, the tracking number and description
+will be asked interactively.
+
+To get the status of all tracked parcels:
 
     $ track all
 
@@ -52,13 +56,14 @@ You can list the tracked parcels:
 
 Or simply remove one from the list:
 
-    $ track remove <tracking_number>
+    $ track remove [tracking_number]
+
+Omitting the tracking number lets you select one from a list.
 
 ## Caveats
 
-* The library crate API is unstable
-* There is currently no proper error handling
-* I have tested it only for Colissimo parcels
+* There is currently no proper error handling when calling the La Poste API.
+* I have tested it only for Colissimo parcels.
 
 ## [Contributing](CONTRIBUTING.md)
 
