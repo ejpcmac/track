@@ -72,7 +72,7 @@ Before contributing to this project, please read the
 
 ## License
 
-Copyright © 2020 Jean-Philippe Cugnet
+Copyright © 2020, 2022 Jean-Philippe Cugnet
 
 This project is licensed under the [GNU General Public License
 3.0](https://www.gnu.org/licenses/gpl-3.0.txt).
