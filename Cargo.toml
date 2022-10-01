@@ -11,14 +11,14 @@ askama = "0.11"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["derive", "wrap_help"] }
 color-eyre = "0.6"
-colored = "2.0"
+colored = "2"
 derive-new = "0.5"
-dirs = "4.0"
+dirs = "4"
 eyre = "0.6"
 inquire = "0.4"
 regex = "1"
-serde = { version = "1.0", features = ["derive"] }
-thiserror = "1.0"
+serde = { version = "1", features = ["derive"] }
+thiserror = "1"
 toml = "0.5"
 
 [dependencies.reqwest]
