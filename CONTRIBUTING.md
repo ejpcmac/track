@@ -107,4 +107,4 @@ the existing code.
 ## Commit style
 
 Please name your commits using [Conventional
-Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+Commits](https://www.conventionalcommits.org/en/v1.0.0/).
