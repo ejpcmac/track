@@ -18,7 +18,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 * **BREAKING** Rename the state file from `<DATA_DIR>/track/data.toml` to
     `<DATA_DIR>/track/state.toml`.
 * **BREAKING** Make the library APIs private.
+* Improve usage error handling.
 * Update the dependencies.
+
+### Fixed
+
+* [remove] Print the error message in red when a parcel was not tracked (#1).
 
 ## [0.1.1] - 2020-10-29
 
