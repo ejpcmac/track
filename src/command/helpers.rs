@@ -13,21 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//! A quick-and-dirty CLI tool for tracking parcels.
+/// Prints a success.
+#[macro_export]
+macro_rules! success {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).green().bold();
+        println!("{message}");
+    }};
+}
 
-#![warn(rust_2018_idioms)]
-#![warn(clippy::redundant_pub_crate)]
-#![warn(clippy::unwrap_used)]
-#![warn(clippy::use_self)]
-#![deny(missing_docs)]
-#![deny(unused_must_use)]
-#![forbid(unsafe_code)]
+/// Prints an error.
+#[macro_export]
+macro_rules! error {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).red().bold();
+        println!("{message}");
+    }};
+}
 
-use eyre::Result;
-
-use track::Track;
-
-fn main() -> Result<()> {
-    color_eyre::install()?;
-    Track::run()
+/// Prints a hint.
+#[macro_export]
+macro_rules! hint {
+    ($($arg:tt)*) => {{
+        use colored::Colorize;
+        let message = format!($($arg)*).blue();
+        println!("{message}");
+    }};
 }

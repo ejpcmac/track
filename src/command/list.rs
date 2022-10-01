@@ -13,21 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//! A quick-and-dirty CLI tool for tracking parcels.
-
-#![warn(rust_2018_idioms)]
-#![warn(clippy::redundant_pub_crate)]
-#![warn(clippy::unwrap_used)]
-#![warn(clippy::use_self)]
-#![deny(missing_docs)]
-#![deny(unused_must_use)]
-#![forbid(unsafe_code)]
-
+use clap::Parser;
+use colored::Colorize;
 use eyre::Result;
 
-use track::Track;
+use crate::state::State;
 
-fn main() -> Result<()> {
-    color_eyre::install()?;
-    Track::run()
+/// Arguments for `track list`.
+#[derive(Debug, Parser)]
+pub struct List;
+
+impl super::Command for List {
+    fn run(&self) -> Result<()> {
+        let state = State::load()?;
+
+        println!("\n{}\n", "--- Tracked parcels ---".bold());
+        for (tracking_number, description) in state.parcels() {
+            println!("{tracking_number}: {description}");
+        }
+        println!();
+
+        Ok(())
+    }
 }

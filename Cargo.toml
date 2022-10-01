@@ -1,21 +1,27 @@
 [package]
 name = "track"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Jean-Philippe Cugnet <jean-philippe@cugnet.eu>"]
-license = "GPL-3.0-or-later"
-edition = "2018"
+edition = "2021"
+license = "GPL-3.0-only"
+description = "A quick-and-dirty CLI tool for tracking parcels."
 
 [dependencies]
-
-structopt = "0.3.9"
-colored = "1.9.3"
-im = { version = "14.2.0", features = ["serde"] }
-dirs = "2.0.2"
-serde = { version = "1.0.104", features = ["derive"] }
-toml = "0.5.0"
-chrono = { version = "0.4.10", features = ["serde"] }
+askama = "0.11"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive", "wrap_help"] }
+color-eyre = "0.6"
+colored = "2"
+derive-new = "0.5"
+dirs = "4"
+eyre = "0.6"
+inquire = "0.4"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+thiserror = "1"
+toml = "0.5"
 
 [dependencies.reqwest]
-version = "0.10.2"
+version = "0.11"
 default-features = false
 features = ["rustls-tls", "blocking", "json"]

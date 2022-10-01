@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2022-10-01
+
+### Added
+
+* Add an interactive mode for `track add` and `track remove` when no arguments
+    are provided.
+
+### Changed
+
+* **BREAKING** Rename the state file from `<DATA_DIR>/track/data.toml` to
+    `<DATA_DIR>/track/state.toml`.
+* **BREAKING** Make the library APIs private.
+* Improve usage error handling.
+* Update the dependencies.
+
+### Fixed
+
+* [remove] Print the error message in red when a parcel was not tracked (#1).
+
 ## [0.1.1] - 2020-10-29
 
 ### Changed
@@ -26,5 +45,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
     * no machine-related error handling (including no error handling at all for
       the API).
 
-[0.1.1]: https://github.com/ejpcmac/xgen/compare/v0.1.0...0.1.1
+[0.2.0]: https://github.com/ejpcmac/track/compare/v0.1.1...0.2.0
+[0.1.1]: https://github.com/ejpcmac/track/compare/v0.1.0...0.1.1
 [0.1.0]: https://github.com/ejpcmac/track/releases/tag/v0.1.0

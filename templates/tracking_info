@@ -1,0 +1,11 @@
+
+{% match description %}
+  {% when Some with (desc) -%}
+    {{ "--- {} ({}) ---"|format(desc, tracking_number)|bold }}
+  {%- when None -%}
+    {{ "--- {} ---"|format(tracking_number)|bold }}
+{%- endmatch %}
+
+{% for event in events.iter().rev() -%}
+  {{ "{}:"|format(event.date.to_rfc2822())|bright_black }} {{ event.label }}
+{% endfor %}

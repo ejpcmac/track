@@ -1,10 +1,9 @@
 // track - A quick-and-dirty CLI tool for tracking parcels.
-// Copyright (C) 2020 Jean-Philippe Cugnet <jean-philippe@cugnet.eu>
+// Copyright (C) 2020, 2022 Jean-Philippe Cugnet <jean-philippe@cugnet.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// the Free Software Foundation, version 3 of the License.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,22 +11,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 //! A quick-and-dirty client for the La Poste “Suivi v2” API.
 
 use chrono::{DateTime, Local};
-use reqwest::header::{self, HeaderMap};
-use serde::{Deserialize, Serialize};
-use std::{fs, io};
+use reqwest::header::{self, HeaderMap, HeaderValue, InvalidHeaderValue};
+use serde::Deserialize;
+use thiserror::Error;
 
-/// The client configuration.
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    api_key: String,
-}
-
-/// An API client.
+/// A La Poste “Suivi v2” API client.
 #[derive(Debug)]
 pub struct Client {
     reqwest_client: reqwest::blocking::Client,
@@ -53,53 +46,33 @@ pub struct Event {
     pub label: String,
 }
 
-const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
-
-impl Config {
-    /// Creates a new configuration.
-    pub fn new(api_key: &str) -> Self {
-        Self {
-            api_key: api_key.to_owned(),
-        }
-    }
-
-    /// Loads the configuration.
-    pub fn load() -> io::Result<Self> {
-        let config_file = dirs::config_dir()
-            .unwrap()
-            .join("track")
-            .join("config.toml");
-        let contents = fs::read_to_string(config_file)?;
-        let config = toml::from_str(&contents)?;
-        Ok(config)
-    }
-
-    /// Saves the configuration.
-    pub fn save(&self) -> io::Result<()> {
-        let config_dir = dirs::config_dir().unwrap().join("track");
-        fs::create_dir_all(&config_dir)?;
-
-        let config_file = config_dir.join("config.toml");
-        let config = toml::to_string(self).unwrap();
-        fs::write(config_file, config)?;
-
-        Ok(())
-    }
+/// An error that can occur when creating a new `Client`.
+#[derive(Debug, Error)]
+pub enum NewClientError {
+    #[error("invalid API key")]
+    InvalidApiKey(#[from] InvalidHeaderValue),
+    #[error("impossible to create a client")]
+    ClientBuilderError(#[from] reqwest::Error),
 }
+
+/// The API endpoint.
+const API_ENDPOINT: &str = "https://api.laposte.fr/suivi/v2/idships/";
 
 impl Client {
     /// Creates a new `Client`.
-    pub fn new(config: Config) -> Self {
+    pub fn new(api_key: &str) -> Result<Self, NewClientError> {
         let mut headers = HeaderMap::new();
-        headers.insert(header::ACCEPT, "application/json".parse().unwrap());
-        headers.insert("X-Okapi-Key", config.api_key.parse().unwrap());
+        headers.insert(
+            header::ACCEPT,
+            HeaderValue::from_static("application/json"),
+        );
+        headers.insert("X-Okapi-Key", api_key.parse()?);
 
         let reqwest_client = reqwest::blocking::Client::builder()
             .default_headers(headers)
-            .build()
-            .unwrap();
+            .build()?;
 
-        Self { reqwest_client }
+        Ok(Self { reqwest_client })
     }
 
     /// Retrieves the events for a parcel.

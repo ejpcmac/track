@@ -1,5 +1,5 @@
 // track - A quick-and-dirty CLI tool for tracking parcels.
-// Copyright (C) 2020, 2022 Jean-Philippe Cugnet <jean-philippe@cugnet.eu>
+// Copyright (C) 2022 Jean-Philippe Cugnet <jean-philippe@cugnet.eu>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,21 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//! A quick-and-dirty CLI tool for tracking parcels.
+use askama::Template;
+use derive_new::new;
 
-#![warn(rust_2018_idioms)]
-#![warn(clippy::redundant_pub_crate)]
-#![warn(clippy::unwrap_used)]
-#![warn(clippy::use_self)]
-#![deny(missing_docs)]
-#![deny(unused_must_use)]
-#![forbid(unsafe_code)]
+use crate::client::Event;
 
-use eyre::Result;
+use super::askama_filters as filters;
 
-use track::Track;
-
-fn main() -> Result<()> {
-    color_eyre::install()?;
-    Track::run()
+/// A tracking info view.
+#[derive(new, Debug, Template)]
+#[template(path = "tracking_info")]
+pub struct TrackingInfo<'a> {
+    tracking_number: &'a str,
+    description: Option<&'a str>,
+    events: &'a [Event],
 }
