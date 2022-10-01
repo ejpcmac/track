@@ -24,7 +24,7 @@ use crate::{config::Config, success};
 #[derive(Debug, Parser)]
 pub struct Init {
     /// Force the init process.
-    #[clap(short, long)]
+    #[arg(short, long)]
     force: bool,
 }
 
