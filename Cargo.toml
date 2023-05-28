@@ -1,6 +1,6 @@
 [package]
 name = "track"
-version = "0.2.0"
+version = "0.2.1-dev"
 authors = ["Jean-Philippe Cugnet <jean-philippe@cugnet.eu>"]
 edition = "2021"
 license = "GPL-3.0-only"
@@ -24,4 +24,4 @@ toml = "0.5"
 [dependencies.reqwest]
 version = "0.11"
 default-features = false
-features = ["rustls-tls", "blocking", "json"]
+features = ["blocking", "json", "rustls-tls"]
