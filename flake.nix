@@ -12,22 +12,36 @@
         flake-utils.follows = "flake-utils";
       };
     };
+
+    naersk = {
+      url = "github:nix-community/naersk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { flake-utils, ... }@inputs:
+  outputs = { self, flake-utils, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [ (import inputs.rust-overlay) ];
         pkgs = import inputs.nixpkgs { inherit system overlays; };
         rust-toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+        naersk = pkgs.callPackage inputs.naersk {
+          cargo = rust-toolchain;
+          rustc = rust-toolchain;
+        };
       in
       {
+        packages = {
+          default = self.packages.${system}.track;
+          track = naersk.buildPackage { src = ./.; };
+        };
+
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             # Build toolchain.
             rust-toolchain
 
-            # Tools
+            # Tools.
             git
             gitAndTools.gitflow
           ];
