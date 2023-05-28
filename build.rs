@@ -42,7 +42,7 @@ fn version_with_git(cargo_version: &str) -> io::Result<String> {
 
 fn git_describe() -> io::Result<String> {
     let output = Command::new("git")
-        .args(&["describe", "--always", "--dirty=-modified"])
+        .args(["describe", "--always", "--dirty=-modified"])
         .output()?;
     Ok(String::from_utf8(output.stdout).unwrap().trim().to_owned())
 }
@@ -58,21 +58,21 @@ fn git_revision_and_state() -> io::Result<String> {
 
 fn git_revision() -> io::Result<String> {
     let output = Command::new("git")
-        .args(&["rev-parse", "--short", "HEAD"])
+        .args(["rev-parse", "--short", "HEAD"])
         .output()?;
     Ok(String::from_utf8(output.stdout).unwrap().trim().to_owned())
 }
 
 fn git_is_dirty() -> io::Result<bool> {
     let output = Command::new("git")
-        .args(&["status", "--porcelain"])
+        .args(["status", "--porcelain"])
         .output()?;
     Ok(!output.stdout.is_empty())
 }
 
 fn is_cargo_checkout() -> io::Result<bool> {
     let output = Command::new("git")
-        .args(&["status", "--porcelain"])
+        .args(["status", "--porcelain"])
         .output()?;
     Ok(output.stdout == b"?? .cargo-ok\n")
 }

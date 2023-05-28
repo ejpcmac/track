@@ -83,7 +83,7 @@ impl Client {
         let url = API_ENDPOINT.to_owned() + tracking_number;
 
         let tracking_info: TrackingInfo =
-            self.reqwest_client.get(&url).send()?.json()?;
+            self.reqwest_client.get(url).send()?.json()?;
 
         Ok(tracking_info.shipment.event)
     }

@@ -30,7 +30,7 @@ pub struct Info {
 
 impl super::Command for Info {
     fn run(&self) -> Result<()> {
-        let Info { tracking_number } = self;
+        let Self { tracking_number } = self;
         let config = Config::load()?;
         let client = Client::new(config.api_key())?;
 

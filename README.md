@@ -18,45 +18,51 @@ quickly, even with a high-speed internet access.
 
 ## Setup
 
+### Installation
+
+With Nix:
+
+    nix profile install github:ejpcmac/track
+
+With Cargo:
+
+    cargo install --git https://github.com/ejpcmac/track.git
+
+### Configuration
+
 To use `track`, you need an account on [La Poste
 Developer](https://developer.laposte.fr). You can then create a new
 application—name it `track` for instance—and register to their [free tracking
 API](https://developer.laposte.fr/products/suivi/latest) to get an API key.
 
-Then, install `track`:
+Then, configure `track` to use your API key:
 
-```shell
-$ cargo install --git https://github.com/ejpcmac/track.git
-```
-
-Configure `track` to use your API key:
-
-    $ track init
+    track init
 
 ## Usage
 
 You can track an individual parcel:
 
-    $ track info <tracking_number>
+    track info <tracking_number>
 
 If you want to track a few parcels regularly, you can add them:
 
-    $ track add [tracking_number] [description]
+    track add [tracking_number] [description]
 
 If you call `track add` without parameters, the tracking number and description
 will be asked interactively.
 
 To get the status of all tracked parcels:
 
-    $ track all
+    track all
 
 You can list the tracked parcels:
 
-    $ track list
+    track list
 
 Or simply remove one from the list:
 
-    $ track remove [tracking_number]
+    track remove [tracking_number]
 
 Omitting the tracking number lets you select one from a list.
 
