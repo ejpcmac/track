@@ -8,6 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.2.1] - 2023-05-28
 
+### Added
+
+* Package with Nix.
+
+### Changed
+
+* Update the dependencies.
+
 ## [0.2.0] - 2022-10-01
 
 ### Added
